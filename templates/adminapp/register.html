@@ -1,0 +1,184 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Account – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.pw-strength { height: 4px; border-radius: 2px; margin-top: 8px; display: flex; gap: 4px; }
+.pw-seg { flex: 1; border-radius: 2px; background: var(--border); transition: background .3s; }
+.pw-seg.weak { background: var(--danger); }
+.pw-seg.fair { background: var(--accent); }
+.pw-seg.good { background: var(--success); }
+</style>
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-left">
+    <div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:40px">
+        <div style="width:44px;height:44px;background:rgba(255,255,255,.2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px">🤝</div>
+        <span style="font-family:'Sora',sans-serif;font-weight:700;font-size:20px;color:white">VolunTrack</span>
+      </div>
+      <h1>Start your<br>volunteer journey</h1>
+      <p>Create a free account and connect with meaningful volunteer opportunities in your area.</p>
+    </div>
+    <div class="auth-features">
+      <div class="auth-feature">
+        <div class="feat-icon">🆓</div>
+        <span>100% free to join — always</span>
+      </div>
+      <div class="auth-feature">
+        <div class="feat-icon">📜</div>
+        <span>Verified digital certificates for every event</span>
+      </div>
+      <div class="auth-feature">
+        <div class="feat-icon">👥</div>
+        <span>Join a community of 10,000+ volunteers</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="auth-right" style="overflow-y:auto">
+    <div class="auth-logo">
+      <div class="logo-mark">🤝</div>
+      <span>VolunTrack</span>
+    </div>
+
+    <h2 class="auth-heading">Create account</h2>
+    <p class="auth-sub">Join the VolunTrack community today</p>
+
+    <div class="row g-3">
+      <div class="col-6">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">First Name <span class="req">*</span></label>
+          <input type="text" class="form-control" placeholder="Aryan">
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">Last Name <span class="req">*</span></label>
+          <input type="text" class="form-control" placeholder="Kumar">
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group mt-3">
+      <label class="form-label">Email Address <span class="req">*</span></label>
+      <div class="input-group">
+        <span class="input-icon">✉️</span>
+        <input type="email" class="form-control" placeholder="your@email.com">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Phone Number</label>
+      <div class="input-group">
+        <span class="input-icon">📱</span>
+        <input type="tel" class="form-control" placeholder="+91 XXXXX XXXXX">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">City / Location</label>
+      <div class="input-group">
+        <span class="input-icon">📍</span>
+        <input type="text" class="form-control" placeholder="Ahmedabad, Gujarat">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password <span class="req">*</span></label>
+      <div class="input-group" style="position:relative">
+        <span class="input-icon">🔒</span>
+        <input type="password" class="form-control" placeholder="Min. 8 characters" id="regPwd" oninput="checkStrength(this.value)">
+        <button onclick="togglePwd('regPwd')" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--muted)">👁</button>
+      </div>
+      <div class="pw-strength">
+        <div class="pw-seg" id="seg1"></div>
+        <div class="pw-seg" id="seg2"></div>
+        <div class="pw-seg" id="seg3"></div>
+        <div class="pw-seg" id="seg4"></div>
+      </div>
+      <div class="form-hint" id="pwHint">Use 8+ characters with letters and numbers</div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Confirm Password <span class="req">*</span></label>
+      <div class="input-group">
+        <span class="input-icon">🔒</span>
+        <input type="password" class="form-control" placeholder="Repeat password">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Volunteer Interests (select all that apply)</label>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:4px">
+        <label style="display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px;transition:all .2s" onclick="this.classList.toggle('selected')" id="tag-env">
+          🌿 Environment
+        </label>
+        <label style="display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px" onclick="toggleTag(this)">
+          📚 Education
+        </label>
+        <label style="display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px" onclick="toggleTag(this)">
+          🏥 Health
+        </label>
+        <label style="display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px" onclick="toggleTag(this)">
+          👥 Community
+        </label>
+        <label style="display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px" onclick="toggleTag(this)">
+          🐾 Animals
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="check-group">
+        <input type="checkbox">
+        <span style="font-size:13px">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a> <span class="req">*</span></span>
+      </label>
+    </div>
+
+    <a href="{% url "dashboard_view" %}" class="btn btn-primary btn-lg" style="width:100%;justify-content:center;margin-bottom:16px">
+      Create Account →
+    </a>
+
+    <p style="text-align:center;font-size:14px;color:var(--muted)">
+      Already have an account? <a href="{% url "login_view" %}" style="color:var(--primary);font-weight:600">Sign in →</a>
+    </p>
+  </div>
+</div>
+
+<script>
+function togglePwd(id) {
+  const f = document.getElementById(id);
+  f.type = f.type === 'password' ? 'text' : 'password';
+}
+
+function checkStrength(val) {
+  const segs = [document.getElementById('seg1'), document.getElementById('seg2'), document.getElementById('seg3'), document.getElementById('seg4')];
+  const hint = document.getElementById('pwHint');
+  segs.forEach(s => { s.className = 'pw-seg'; });
+  if (!val) return;
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const cls = score <= 1 ? 'weak' : score <= 2 ? 'fair' : 'good';
+  const labels = ['Weak', 'Weak', 'Fair', 'Good', 'Strong'];
+  hint.textContent = 'Password strength: ' + labels[score];
+  hint.style.color = score <= 1 ? 'var(--danger)' : score <= 2 ? 'var(--accent)' : 'var(--success)';
+  for (let i = 0; i < score; i++) segs[i].classList.add(cls);
+}
+
+function toggleTag(el) {
+  el.style.background = el.style.background ? '' : 'var(--primary-light)';
+  el.style.borderColor = el.style.borderColor ? '' : 'var(--primary)';
+  el.style.color = el.style.color ? '' : 'var(--primary)';
+}
+</script>
+</body>
+</html>

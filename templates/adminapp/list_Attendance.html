@@ -1,0 +1,180 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+{% comment %} <title>Check Out – VolunTrack</title> {% endcomment %}
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+
+<style>
+       body {
+            background-color: #f0f2f5;
+            padding: 40px 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .table-card {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin: auto;
+            max-width: 98%;
+        }
+        .table-title {
+            color: #4e73df;
+            font-weight: 700;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f8f9fc;
+            padding-bottom: 10px;
+        }
+        .table thead {
+            background-color: #4e73df;
+            color: white;
+            white-space: nowrap;
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f8f9fc;
+            transition: 0.3s;
+        }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .active-true { background: #d1e7dd; color: #0f5132; }
+        .active-false { background: #f8d7da; color: #842029; }
+        
+        .table-responsive {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+    </style>
+
+
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+      <div class="row justify-content-center">
+
+
+
+    <div class="container-fluid">
+    <div class="table-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="table-title">Volunteer Attendance Records</h2>
+            <a href="{% url "create_Attendance" %}" class="btn btn-primary btn-sm">+ Add Attendance</a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event</th>
+                        <th>Volunteer</th>
+                        <th>Check-in</th>
+                        <th>Check-out</th>
+                        <th>Total Hours</th>
+                        <th>Status</th>
+                        <th>Verified By</th>
+                        <th>Is Active</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in attends %}
+                    <tr>
+                        <td><strong>{{ forloop.counter }}</strong></td>
+                        <td>{{ i.event.event_name }}</td>
+                        <td>{{ i.volunteer }}</td>
+                        <td><small>{{ i.check_in_time }}</small></td>
+                        <td><small>{{ i.check_out_time }}</small></td>
+                        <td class="fw-bold text-center">{{ i.total_hours }} hr</td>
+                        <td>
+                            <span class="badge bg-info text-dark">{{ i.attendance_status }}</span>
+                        </td>
+                        <td>{{ i.verified_by }}</td>
+                        <td>
+                            {% if i.is_active == "Yes" or i.is_active == "yes" or i.is_active == "True" %}
+                                <span class="status-badge active-true">Active</span>
+                            {% else %}
+                                <span class="status-badge active-false">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td><small class="text-muted">{{ i.created_at|date:"d M Y H:i" }}</small></td>
+                        <td><small class="text-muted">{{ i.updated_at|date:"d M Y H:i" }}</small></td>
+                        <td><small class="text-muted">
+                                {% comment %} <a href="{% url "update_Attendance" i.id %}"><button type="button" class="btn btn-outline-primary">update</button></a>
+                                <a href="{% url "delete_attedance" i.id %}"><button type="button" class="btn btn-outline-danger">Delete</button></a> {% endcomment %}
+                            
+                            <a href="{% url "update_Attendance" i.id %}"
+                            onclick = "return confirm('Are you sure you want to update this Attendance?')">
+                            <button type=button class="btn btn-outline-primary">update</button>
+
+                            <a href="{% url "delete_attedance" i.id %}"
+                            onclick = "return confirm('Are you sure you want to delete this Attendance?')">
+                            <button type=button class="btn btn-outline-danger">Delete</button>
+                        
+                        </small></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+        
+      </div>
+    </div>
+  </div>   
+</div>
+<script>
+
+
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card"><div class="avatar">AK</div>
+<div class="user-info"><div class="name">{{request.user}}</div><div class="role"></div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+{% comment %} document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Check Out</div><div class="page-sub">End your volunteer session</div></div><div class="topbar-actions"><button class="icon-btn">🔔</button></div></div>`); {% endcomment %}
+</script>
+</body>
+</html>

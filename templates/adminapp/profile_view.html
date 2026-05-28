@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.profile-hero {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+.profile-cover {
+  height: 140px;
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 60%, #7C3AED 100%);
+  position: relative;
+}
+.profile-cover-edit {
+  position: absolute;
+  top: 12px; right: 16px;
+  background: rgba(255,255,255,.2);
+  border: 1px solid rgba(255,255,255,.4);
+  color: white;
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+.profile-body { padding: 0 32px 28px; }
+.profile-avatar-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: -40px;
+  margin-bottom: 16px;
+}
+.profile-avatar {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--primary);
+  border: 4px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: white;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1);
+}
+.profile-name { font-size: 22px; margin-bottom: 4px; }
+.profile-handle { color: var(--muted); font-size: 14px; }
+.profile-stats { display: flex; gap: 32px; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+.pstat { text-align: center; }
+.pstat-val { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: var(--dark); }
+.pstat-lbl { font-size: 12px; color: var(--muted); }
+
+.skill-tag {
+  display: inline-block;
+  padding: 5px 12px;
+  background: var(--primary-light);
+  color: var(--primary);
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin: 3px;
+}
+
+.info-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+.info-row:last-child { border-bottom: none; }
+.info-lbl { color: var(--muted); min-width: 120px; font-size: 13px; }
+.info-val { color: var(--dark); font-weight: 500; flex: 1; }
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <!-- sidebar -->
+  <div class="main-content">
+    <!-- topbar -->
+    <div class="page-body">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <!-- Profile Hero -->
+          <div class="profile-hero fade-up">
+            <div class="profile-cover">
+              <button class="profile-cover-edit">✏️ Edit Cover</button>
+            </div>
+            <div class="profile-body">
+              <div class="profile-avatar-wrap">
+                <div class="profile-avatar">AK</div>
+                <a href="{% url "profile_edit_view" %}" class="btn btn-outline btn-sm">✏️ Edit Profile</a>
+              </div>
+              <div class="profile-name">Aryan Kumar</div>
+              <div class="profile-handle">@aryankumar · aryan.kumar@email.com</div>
+              <div style="margin-top:12px;font-size:14px;color:var(--body);line-height:1.7">
+                Passionate community volunteer focused on environmental and youth education initiatives. 
+                Committed to making a positive difference in my local community.
+              </div>
+              <div class="profile-stats">
+                <div class="pstat"><div class="pstat-val">12</div><div class="pstat-lbl">Events</div></div>
+                <div class="pstat"><div class="pstat-val">156h</div><div class="pstat-lbl">Total Hours</div></div>
+                <div class="pstat"><div class="pstat-val">3</div><div class="pstat-lbl">Certificates</div></div>
+                <div class="pstat"><div class="pstat-val">7</div><div class="pstat-lbl">Tasks Done</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Info -->
+          <div class="card fade-up fade-up-1">
+            <div class="card-header">
+              <span class="card-title">📋 Personal Information</span>
+            </div>
+            <div class="card-body">
+              <div class="info-row"><span class="info-lbl">Full Name</span><span class="info-val">Aryan Kumar</span></div>
+              <div class="info-row"><span class="info-lbl">Email</span><span class="info-val">aryan.kumar@email.com</span></div>
+              <div class="info-row"><span class="info-lbl">Phone</span><span class="info-val">+91 98765 43210</span></div>
+              <div class="info-row"><span class="info-lbl">Date of Birth</span><span class="info-val">March 15, 1998</span></div>
+              <div class="info-row"><span class="info-lbl">Location</span><span class="info-val">Ahmedabad, Gujarat, India</span></div>
+              <div class="info-row"><span class="info-lbl">Occupation</span><span class="info-val">Software Engineer</span></div>
+              <div class="info-row"><span class="info-lbl">Member Since</span><span class="info-val">January 2023</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <!-- Skills -->
+          <div class="card fade-up fade-up-1 mb-4">
+            <div class="card-header"><span class="card-title">💡 Skills & Interests</span></div>
+            <div class="card-body">
+              <div>
+                <span class="skill-tag">Environmental</span>
+                <span class="skill-tag">Education</span>
+                <span class="skill-tag">Event Planning</span>
+                <span class="skill-tag">Fundraising</span>
+                <span class="skill-tag">First Aid</span>
+                <span class="skill-tag">Social Media</span>
+                <span class="skill-tag">Photography</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Badges -->
+          <div class="card fade-up fade-up-2 mb-4">
+            <div class="card-header"><span class="card-title">🎖️ Achievements</span></div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center">
+                <div style="padding:12px;background:var(--accent-light);border-radius:var(--radius-sm)">
+                  <div style="font-size:28px">🌟</div>
+                  <div style="font-size:11px;color:var(--body);margin-top:4px;font-weight:600">Star Volunteer</div>
+                </div>
+                <div style="padding:12px;background:var(--success-light);border-radius:var(--radius-sm)">
+                  <div style="font-size:28px">🌱</div>
+                  <div style="font-size:11px;color:var(--body);margin-top:4px;font-weight:600">Go Green</div>
+                </div>
+                <div style="padding:12px;background:var(--primary-light);border-radius:var(--radius-sm)">
+                  <div style="font-size:28px">👥</div>
+                  <div style="font-size:11px;color:var(--body);margin-top:4px;font-weight:600">Team Player</div>
+                </div>
+                <div style="padding:12px;background:var(--danger-light);border-radius:var(--radius-sm)">
+                  <div style="font-size:28px">❤️</div>
+                  <div style="font-size:11px;color:var(--body);margin-top:4px;font-weight:600">50hr Club</div>
+                </div>
+                <div style="padding:12px;background:var(--surface);border-radius:var(--radius-sm);opacity:.4">
+                  <div style="font-size:28px">🏅</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:4px;font-weight:600">100hr Club</div>
+                </div>
+                <div style="padding:12px;background:var(--surface);border-radius:var(--radius-sm);opacity:.4">
+                  <div style="font-size:28px">🎓</div>
+                  <div style="font-size:11px;color:var(--muted);margin-top:4px;font-weight:600">Mentor</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Availability -->
+          <div class="card fade-up fade-up-3">
+            <div class="card-header"><span class="card-title">📆 Availability</span></div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center">
+                <div style="font-size:11px;color:var(--muted);padding:4px">Mo</div>
+                <div style="font-size:11px;color:var(--muted);padding:4px">Tu</div>
+                <div style="font-size:11px;color:var(--muted);padding:4px">We</div>
+                <div style="font-size:11px;color:var(--muted);padding:4px">Th</div>
+                <div style="font-size:11px;color:var(--muted);padding:4px">Fr</div>
+                <div style="font-size:11px;color:var(--muted);padding:4px">Sa</div>
+                <div style="font-size:11px;color:var(--muted);padding:4px">Su</div>
+                <div style="height:28px;border-radius:4px;background:var(--success-light);border:1px solid var(--success);"></div>
+                <div style="height:28px;border-radius:4px;background:var(--border);"></div>
+                <div style="height:28px;border-radius:4px;background:var(--success-light);border:1px solid var(--success);"></div>
+                <div style="height:28px;border-radius:4px;background:var(--border);"></div>
+                <div style="height:28px;border-radius:4px;background:var(--success-light);border:1px solid var(--success);"></div>
+                <div style="height:28px;border-radius:4px;background:var(--success-light);border:1px solid var(--success);"></div>
+                <div style="height:28px;border-radius:4px;background:var(--success-light);border:1px solid var(--success);"></div>
+              </div>
+              <div style="display:flex;gap:12px;margin-top:10px;font-size:12px">
+                <span style="display:flex;align-items:center;gap:5px;color:var(--muted)"><span style="width:12px;height:12px;background:var(--success-light);border:1px solid var(--success);border-radius:2px;display:inline-block"></span> Available</span>
+                <span style="display:flex;align-items:center;gap:5px;color:var(--muted)"><span style="width:12px;height:12px;background:var(--border);border-radius:2px;display:inline-block"></span> Busy</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card">
+<div class="avatar">AK</div><div class="user-info"><div class="name">{{request.user}}</div><div class="role"></div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">My Profile</div></div><div class="topbar-actions"><button class="icon-btn">🔔<span class="badge-dot"></span></button><a href="profile_edit.html" class="btn btn-primary btn-sm">✏️ Edit Profile</a></div></div>`);
+</script>
+</body>
+</html>

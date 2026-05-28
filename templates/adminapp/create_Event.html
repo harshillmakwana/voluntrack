@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+{% comment %} <title>Check Out – VolunTrack</title> {% endcomment %}
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+
+<style>
+        body {
+            background-color: #f0f2f5;
+            padding: 40px 0;
+        }
+        .form-card {            
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 900px;
+            margin: auto;
+        }
+        .form-title {
+            color: #4e73df;
+            font-weight: 700;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f8f9fc;
+            padding-bottom: 10px;
+        }
+        .col-form-label {
+            font-weight: 600;
+            color: #444;
+        }
+        .btn-submit {
+            background: #4e73df;
+            border: none;
+            padding: 10px 30px;
+            font-weight: 600;
+            transition: 0.3s;
+            color: white;
+        }
+        .btn-submit:hover {
+            background: #224abe;
+            transform: translateY(-2px);
+        }
+        .auto-field {
+            background-color: #e9ecef;
+        }
+    </style>
+
+
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+      <div class="row justify-content-center">
+
+
+
+        <div class="container">
+    <div class="form-card">
+        <h2 class="form-title text-center">Event Management Form</h2>
+        
+        <form method="POST">
+            {% csrf_token %}
+
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Event Name</label>
+                <div class="col-sm-9">
+                    <input type="text" name="event_name" class="form-control" maxlength="250" required>
+                </div>
+            </div>   
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Event Description</label>
+                <div class="col-sm-9">
+                    <input type="text" name="event_description" class="form-control" maxlength="250" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                  <label class="col-sm-3 col-form-label">select Events Category</label>
+                  <div class="col-sm-9">
+                    <select class="form-select" name="event_category" aria-label="Default select example">
+                      <option selected>select Events</option>
+                      {% for i in e_cate %}
+                      <option value="{{i.id}}">{{ i.category_name }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Event Date</label>
+                <div class="col-sm-9">
+                    <input type="date" name="event_date" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Time (Start - End)</label>
+                <div class="col-sm-4">
+                    <input type="time" name="start_time" class="form-control" required>
+                </div>
+                <div class="col-sm-1 text-center mt-2">to</div>
+                <div class="col-sm-4">
+                    <input type="time" name="end_time" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Location</label>
+                <div class="col-sm-9">
+                    <input type="text" name="location" class="form-control" maxlength="250" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Required Volunteers</label>
+                <div class="col-sm-9">
+                    <input type="text" name="required_volunteers" class="form-control" maxlength="250" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Created By</label>
+                <div class="col-sm-9">
+                    <input type="text" name="created_by" class="form-control" maxlength="250" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Event Status</label>
+                <div class="col-sm-9">
+                    <input type="text" name="event_status" class="form-control" maxlength="250" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Is Active</label>
+                <div class="col-sm-9">
+                    <input type="text" name="is_active" class="form-control" maxlength="250" placeholder="Yes/No or True/False" required>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label">Created At</label>
+                <div class="col-sm-9">
+                    <input type="date" name="created_at" class="form-control" maxlength="250" required>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <label class="col-sm-3 col-form-label">Updated At</label>
+                <div class="col-sm-9">
+                    <input type="date" name="updated_at" class="form-control" maxlength="250" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-9 offset-sm-3">
+                    <button type="submit" class="btn btn-primary btn-submit">Submit Event Details</button>
+                    <button type="reset" class="btn btn-outline-secondary ms-2">Reset</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+        
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+
+
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card"><div class="avatar">AK</div>
+<div class="user-info"><div class="name">Aryan Kumar</div><div class="role">Volunteer</div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+{% comment %} document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Check Out</div><div class="page-sub">End your volunteer session</div></div><div class="topbar-actions"><button class="icon-btn">🔔</button></div></div>`); {% endcomment %}
+</script>
+</body>
+</html>

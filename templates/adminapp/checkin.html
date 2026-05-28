@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Check In – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.checkin-event {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.checkin-event:hover { border-color: var(--primary); background: var(--primary-light); }
+.checkin-event.selected { border-color: var(--primary); background: var(--primary-light); }
+.checkin-event .ce-icon { font-size: 32px; flex-shrink: 0; }
+.checkin-event .ce-time { font-size: 13px; color: var(--primary); font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+
+          <!-- Clock -->
+          <div class="card fade-up mb-4">
+            <div class="clock-card">
+              <div class="clock-display" id="clock">09:24:36</div>
+              <div class="clock-date" id="dateStr">Thursday, February 26, 2026</div>
+              <div style="margin-top:12px"><span class="badge badge-success">🟢 Check-in Active</span></div>
+            </div>
+          </div>
+
+          <!-- Today's Events -->
+          <div class="card fade-up fade-up-1 mb-4">
+            <div class="card-header"><span class="card-title">📅 Your Events Today</span></div>
+            <div class="card-body">
+
+              <div class="checkin-event selected" id="ev1" onclick="selectEvent('ev1')">
+                <span class="ce-icon">🌿</span>
+                <div style="flex:1">
+                  <div style="font-weight:600;font-size:15px;color:var(--dark)">Community Park Cleanup</div>
+                  <div class="ce-time">9:00 AM – 1:00 PM</div>
+                  <div style="font-size:13px;color:var(--muted)">📍 Riverside Park &nbsp;·&nbsp; Role: General Volunteer</div>
+                </div>
+                <div id="sel-ev1" style="font-size:20px">✅</div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Check-in Methods -->
+          <div class="card fade-up fade-up-2 mb-4">
+            <div class="card-header"><span class="card-title">🔑 Check-in Method</span></div>
+            <div class="card-body">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px">
+                <div class="checkin-event" style="flex-direction:column;align-items:center;text-align:center;gap:8px;padding:20px" id="method-qr" onclick="selectMethod('qr')">
+                  <span style="font-size:28px">📷</span>
+                  <span style="font-size:13px;font-weight:600">QR Code</span>
+                </div>
+                <div class="checkin-event selected" style="flex-direction:column;align-items:center;text-align:center;gap:8px;padding:20px" id="method-manual" onclick="selectMethod('manual')">
+                  <span style="font-size:28px">📝</span>
+                  <span style="font-size:13px;font-weight:600">Manual Code</span>
+                </div>
+                <div class="checkin-event" style="flex-direction:column;align-items:center;text-align:center;gap:8px;padding:20px" id="method-geo" onclick="selectMethod('geo')">
+                  <span style="font-size:28px">📍</span>
+                  <span style="font-size:13px;font-weight:600">GPS Location</span>
+                </div>
+              </div>
+
+              <!-- QR Code Section (shown by default) -->
+              <div id="section-qr" style="display:none">
+                <div class="qr-box">
+                  <span class="icon">📷</span>
+                  <span>Point camera at QR code</span>
+                </div>
+                <div style="text-align:center;font-size:13px;color:var(--muted)">Or ask the event manager to show their screen</div>
+              </div>
+
+              <!-- Manual Code -->
+              <div id="section-manual">
+                <div class="form-group">
+                  <label class="form-label">Enter Event Check-in Code</label>
+                  <div style="display:flex;gap:10px">
+                    <input type="text" class="form-control" placeholder="e.g. PARK-2026" id="codeInput" maxlength="12" style="font-size:18px;letter-spacing:3px;font-weight:600;text-transform:uppercase">
+                    <button class="btn btn-primary btn-lg" onclick="doCheckin()" style="white-space:nowrap">Check In →</button>
+                  </div>
+                  <div class="form-hint">The check-in code is provided by the event organizer</div>
+                </div>
+              </div>
+
+              <!-- GPS -->
+              <div id="section-geo" style="display:none;text-align:center">
+                <div style="padding:24px;background:var(--primary-light);border-radius:var(--radius);margin-bottom:16px">
+                  <div style="font-size:40px;margin-bottom:8px">📍</div>
+                  <div style="font-size:14px;color:var(--primary);font-weight:600">Location-based Check-in</div>
+                  <div style="font-size:13px;color:var(--muted);margin-top:4px">You must be within 100m of the event venue</div>
+                </div>
+                <button class="btn btn-primary" onclick="doCheckin()">📍 Verify My Location</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Success Card (hidden) -->
+          <div class="card fade-up" id="successCard" style="display:none">
+            <div class="card-body" style="text-align:center;padding:48px">
+              <div style="font-size:64px;margin-bottom:16px">✅</div>
+              <h3 style="font-size:22px;margin-bottom:8px;color:var(--success)">Checked In Successfully!</h3>
+              <p style="color:var(--muted);margin-bottom:20px">You are now checked in to <strong>Community Park Cleanup</strong></p>
+              <div style="background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius);padding:20px;max-width:260px;margin:0 auto 24px">
+                <div style="font-size:12px;color:var(--muted)">Check-in Time</div>
+                <div style="font-size:24px;font-weight:700;font-family:'Sora',sans-serif;color:var(--success)">9:24 AM</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:4px">Feb 26, 2026</div>
+              </div>
+              <a href="{% url "dashboard_view" %}" class="btn btn-primary">Go to Dashboard</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+// Clock
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('en-US', {hour12: false});
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+function selectMethod(m) {
+  ['qr','manual','geo'].forEach(id => {
+    document.getElementById('method-' + id).classList.remove('selected');
+    document.getElementById('section-' + id).style.display = 'none';
+  });
+  document.getElementById('method-' + m).classList.add('selected');
+  document.getElementById('section-' + m).style.display = 'block';
+}
+
+function doCheckin() {
+  const code = document.getElementById('codeInput');
+  if (code && code.value.trim() === '') { code.focus(); return; }
+  document.querySelectorAll('.card').forEach(c => { if (!c.id) c.style.display = 'none'; });
+  document.getElementById('successCard').style.display = 'block';
+}
+
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card"><div class="avatar">AK</div>
+<div class="user-info"><div class="name">{{request.user}}</div><div class="role"></div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Check In</div><div class="page-sub">Sign in to today's events</div></div><div class="topbar-actions"><button class="icon-btn">🔔</button></div></div>`);
+</script>
+</body>
+</html>

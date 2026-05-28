@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #VT-{{ i.id }} | VolunTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1a6b3a;
+            --dark: #0d1f14;
+            --gray: #6b7c74;
+            --light: #f4f9f6;
+            --gold: #e8a020;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; color: var(--dark); line-height: 1.6; background: #fff; }
+
+        .invoice-container {
+            max-width: 850px;
+            margin: 40px auto;
+            padding: 50px;
+            border: 1px solid #eee;
+            position: relative;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        .invoice-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 50px;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 30px;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+        .logo span { color: var(--gold); }
+
+        .invoice-info { text-align: right; }
+        .invoice-info h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+        .invoice-info p { color: var(--gray); font-size: 0.9rem; }
+
+        .address-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .address-box h3 {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--gray);
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .address-box p { font-size: 1rem; margin-bottom: 5px; }
+        .address-box .name { font-weight: 700; font-size: 1.1rem; }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 50px;
+        }
+
+        .invoice-table th {
+            background: var(--light);
+            text-align: left;
+            padding: 15px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--primary);
+            border-bottom: 2px solid #eee;
+        }
+
+        .invoice-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.95rem;
+        }
+
+        .total-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .total-box {
+            width: 300px;
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        .total-row.grand-total {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+
+        .status-stamp {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            border: 4px solid #28a745;
+            color: #28a745;
+            padding: 10px 40px;
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            border-radius: 15px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .footer {
+            margin-top: 80px;
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .print-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 700;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        .print-btn:hover { transform: translateY(-5px); }
+
+        @media print {
+            .print-btn { display: none; }
+            .invoice-container { margin: 0; border: none; box-shadow: none; width: 100%; max-width: 100%; }
+            body { background: white; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="invoice-container">
+        <!-- Paid Stamp -->
+        {% if i.payment_status == 'Paid' %}
+        <div class="status-stamp">Paid</div>
+        {% endif %}
+
+        <header class="invoice-header">
+            <div class="logo">Volun<span>Track</span></div>
+            <div class="invoice-info">
+                <h1>INVOICE</h1>
+                <p>Invoice #: <strong>VT-{{ i.id }}{{ i.booking_date|date:"Ymd" }}</strong></p>
+                <p>Date: <strong>{{ i.booking_date|date:"F d, Y" }}</strong></p>
+            </div>
+        </header>
+
+        <div class="address-grid">
+            <div class="address-box">
+                <h3>Issued To</h3>
+                <p class="name">{{ i.name }}</p>
+                <p>{{ i.email }}</p>
+                <p>{{ i.phone_number }}</p>
+                <p>Role: Volunteer</p>
+            </div>
+            <div class="address-box">
+                <h3>From Organization</h3>
+                <p class="name">{{ i.event_name.created_by }}</p>
+                <p>Authorized Partner</p>
+                <p>VolunTrack Ecosystem</p>
+                <p>Status: <strong style="color: var(--primary)">Verified</strong></p>
+            </div>
+        </div>
+
+        {% if payment %}
+        <div style="background: var(--light); border: 1px solid var(--primary); border-radius: 12px; padding: 25px; margin-bottom: 40px; box-shadow: 0 4px 12px rgba(26,107,58,0.03);">
+            <h3 style="font-size: 0.85rem; text-transform: uppercase; color: var(--primary); letter-spacing: 1px; margin-bottom: 15px; display: flex; align-items: center; gap: 8px; font-weight: 700;">
+                <i class="fas fa-shield-alt text-success"></i> Secure Razorpay Payment Verification
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; font-size: 0.9rem;">
+                <div>
+                    <span style="color: var(--gray); font-weight: 500;">Payment ID:</span> 
+                    <strong style="color: var(--dark); font-family: monospace;">{{ payment.razorpay_payment_id }}</strong>
+                </div>
+                <div>
+                    <span style="color: var(--gray); font-weight: 500;">Order ID:</span> 
+                    <strong style="color: var(--dark); font-family: monospace;">{{ payment.razorpay_order_id }}</strong>
+                </div>
+                <div>
+                    <span style="color: var(--gray); font-weight: 500;">Payment Gateway:</span> 
+                    <strong style="color: var(--dark);">Razorpay Sandbox (Test Mode)</strong>
+                </div>
+                <div>
+                    <span style="color: var(--gray); font-weight: 500;">Paid Date:</span> 
+                    <strong style="color: var(--dark);">{{ payment.created_at|date:"F d, Y - H:i:s" }} UTC</strong>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Event Description</th>
+                    <th>Category</th>
+                    <th>Time Period</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <strong>{{ i.event_name.event_name }}</strong><br>
+                        <small style="color: var(--gray)">Professional Volunteer Services</small>
+                    </td>
+                    <td>{{ i.categorys.category_name }}</td>
+                    <td>{{ i.time_start }} - {{ i.time_end }}</td>
+                    <td>{{ i.process_status }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            <div class="total-box">
+                <div class="total-row">
+                    <span>Base Amount</span>
+                    <span>₹{{ i.price }}</span>
+                </div>
+                <div class="total-row">
+                    <span>Platform Fee</span>
+                    <span>₹0.00</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total Amount</span>
+                    <span>{% if i.payment_status == 'Paid' %}₹{{ i.price }}{% else %}PENDING{% endif %}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Thank you for contributing to your community with VolunTrack.</p>
+            <p>This is a computer-generated invoice and does not require a physical signature.</p>
+            <p style="margin-top: 10px;">&copy; 2026 VolunTrack Inc. All rights reserved.</p>
+        </div>
+    </div>
+
+    <button class="print-btn" onclick="window.print()">
+        Download PDF / Print
+    </button>
+
+</body>
+</html>

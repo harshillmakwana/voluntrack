@@ -1,0 +1,308 @@
+{% extends "userapp/master.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Events – VolunTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#1a6b3a;--green-light:#2d9e58;--green-pale:#e8f5ee;--gold:#e8a020;--dark:#0d1f14;--gray:#6b7c74;--white:#fafdf9;--border:#d0e6d8;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--dark);overflow-x:hidden;}
+  nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(250,253,249,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:70px;}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:900;text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--dark);font-size:0.9rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--green);}
+  .nav-cta{display:flex;gap:1rem;}
+  .btn{padding:0.55rem 1.4rem;border-radius:6px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;border:none;}
+  .btn-outline{border:2px solid var(--green);color:var(--green);background:transparent;}
+  .btn-outline:hover{background:var(--green);color:white;}
+  .btn-solid{background:var(--green);color:white;}
+  .btn-solid:hover{background:var(--green-light);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{width:25px;height:2px;background:var(--dark);}
+  .mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1.5rem 5%;z-index:999;flex-direction:column;gap:1rem;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{text-decoration:none;color:var(--dark);font-weight:500;font-size:1rem;padding:0.5rem 0;border-bottom:1px solid var(--border);}
+
+  .page-header{background:linear-gradient(135deg,#0d1f14,#1a6b3a);padding:130px 5% 70px;text-align:center;}
+  .page-header .label{color:var(--gold);font-size:0.8rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+  .page-header h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:white;margin-bottom:1rem;}
+  .page-header p{color:rgba(255,255,255,0.7);font-size:1.05rem;max-width:600px;margin:auto;line-height:1.8;}
+
+  .main-content{max-width:1200px;margin:auto;padding:4rem 5%;}
+  .section-label{color:var(--green);font-size:0.8rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+  .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);color:var(--dark);line-height:1.2;margin-bottom:1rem;}
+
+  /* FILTERS */
+  .filters-bar{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;margin-bottom:2.5rem;padding:1.5rem;background:white;border:1px solid var(--border);border-radius:14px;}
+  .filter-group{display:flex;flex-direction:column;gap:0.3rem;flex:1;min-width:150px;}
+  .filter-group label{font-size:0.75rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;}
+  .filter-group select,.filter-group input{padding:0.6rem 0.9rem;border:1px solid var(--border);border-radius:8px;font-size:0.875rem;font-family:'DM Sans',sans-serif;background:white;color:var(--dark);outline:none;}
+  .filter-group select:focus,.filter-group input:focus{border-color:var(--green);}
+  .btn-filter{background:var(--green);color:white;padding:0.7rem 1.5rem;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:0.875rem;align-self:flex-end;}
+
+  /* EVENTS GRID */
+  .events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.75rem;}
+  .event-card{background:white;border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:all .3s;}
+  .event-card:hover{box-shadow:0 12px 40px rgba(26,107,58,0.12);transform:translateY(-4px);}
+  .event-banner{height:160px;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;}
+  .event-status{position:absolute;top:12px;right:12px;padding:0.3rem 0.8rem;border-radius:100px;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;}
+  .status-open{background:rgba(45,158,88,0.9);color:white;}
+  .status-filled{background:rgba(232,160,32,0.9);color:white;}
+  .status-upcoming{background:rgba(74,144,217,0.9);color:white;}
+  .event-body{padding:1.5rem;}
+  .event-category{color:var(--green);font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;}
+  .event-body h3{font-size:1.1rem;font-weight:700;margin-bottom:0.75rem;line-height:1.3;}
+  .event-meta{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;}
+  .meta-item{display:flex;align-items:center;gap:0.5rem;font-size:0.825rem;color:var(--gray);}
+  .event-skills{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.25rem;}
+  .skill-tag{background:var(--green-pale);color:var(--green);padding:0.2rem 0.65rem;border-radius:100px;font-size:0.72rem;font-weight:600;}
+  .event-footer{display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:1rem;}
+  .volunteers-count{font-size:0.8rem;color:var(--gray);}
+  .volunteers-count strong{color:var(--dark);}
+  .btn-join{background:var(--green);color:white;padding:0.5rem 1.2rem;border-radius:6px;font-size:0.825rem;font-weight:600;text-decoration:none;transition:all .2s;border:none;cursor:pointer;}
+  .btn-join:hover{background:var(--green-light);}
+
+  /* PAGINATION */
+  .pagination{display:flex;gap:0.5rem;justify-content:center;margin-top:3rem;}
+  .page-btn{width:40px;height:40px;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.875rem;font-weight:600;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+  .page-btn.active,.page-btn:hover{background:var(--green);color:white;border-color:var(--green);}
+
+  footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:4rem 5% 2rem;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:auto;margin-bottom:3rem;}
+  .footer-brand .nav-logo{display:block;margin-bottom:1rem;}
+  .footer-brand p{font-size:0.875rem;line-height:1.7;}
+  .footer-col h4{color:white;font-weight:700;font-size:0.9rem;margin-bottom:1.25rem;}
+  .footer-col ul{list-style:none;}
+  .footer-col ul li{margin-bottom:0.6rem;}
+  .footer-col ul li a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem;transition:color .2s;}
+  .footer-col ul li a:hover{color:var(--gold);}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;text-align:center;font-size:0.8rem;max-width:1200px;margin:auto;}
+
+  @media(max-width:900px){.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.footer-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.footer-grid{grid-template-columns:1fr;}.events-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="{% url "index_view1" %}">Home</a><a href="{% url "about_view1" %}">About</a><a href="{% url "events_view1" %}">Events</a>
+  <a href="{% url "volunteers_view1" %}">Volunteers</a><a href="{% url "contact_view1" %}">Contact</a>
+  <a href="{% url "login_view" %}">Login</a><a href="{% url "contact_view1" %}">Register</a>
+</div>
+
+<div class="page-header">
+  <div class="label">Upcoming Opportunities</div>
+  <h1>Events & Volunteering</h1>
+  <p>Browse and join meaningful events organized by NGOs and non-profits across the country.</p>
+</div>
+
+<div class="main-content">
+  <div class="section-label">Find Events</div>
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label>Search</label>
+      <input type="text" placeholder="Event name or keyword..." name='search' value="{{ search }}">
+      
+    </div>
+    {% comment %} <div class="filter-group">
+      <label>Category</label>
+      <select>
+        <option>All Categories</option>
+        <option>Education</option>
+        <option>Healthcare</option>
+        <option>Environment</option>
+        <option>Community</option>
+        <option>Technology</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Status</label>
+      <select>
+        <option>All Status</option>
+        <option>Open</option>
+        <option>Upcoming</option>
+        <option>Filled</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Location</label>
+      <input type="text" placeholder="City or region...">
+    </div> {% endcomment %}
+    <button class="btn-filter" type="submit">Search</button>
+  </div>
+
+  <div class="events-grid">
+    <!-- Event 1 -->
+     {% for i in eve%}
+    <div class="event-card">
+      <div class="event-banner" style="background:linear-gradient(135deg,#1a6b3a,#2d9e58)">
+        📚
+        <span class="event-status status-open">Open</span>
+      </div>
+      <div class="event-body">
+        <div class="event-category">{{i.event_category}}</div>
+        <h3>{{i.event_name}}</h3>
+        <div class="event-meta">
+          <div class="meta-item">📅 {{ i.event_date}}.   -{{i.start_time}}</div>
+          <div class="meta-item">📍 {{i.location}}</div>
+          <div class="meta-item">🏢 {{i.created_by}}</div>
+          <div class="meta-item"><strong style="color: var(--green)">💰 Reward: ₹{{ i.event_price }}</strong></div>
+        </div>
+        <div class="event-skills">
+          <span class="skill-tag">Teaching</span>
+          <span class="skill-tag">Communication</span>
+          <span class="skill-tag">Hindi/English</span>
+        </div>
+        <div class="event-footer">
+          <div class="volunteers-count"><strong>18</strong> / 25 volunteers</div>
+          <a href="{% url "create_booking" i.id %}" class="btn-join">Join Event</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    {% comment %} <!-- Event 2 -->
+    <div class="event-card">
+      <div class="event-banner" style="background:linear-gradient(135deg,#0d4a6b,#1a7ea8)">
+        🏥
+        <span class="event-status status-open">Open</span>
+      </div>
+      <div class="event-body">
+        <div class="event-category">Healthcare</div>
+        <h3>Free Health Camp – Affordable Care for All</h3>
+        <div class="event-meta">
+          <div class="meta-item">📅 April 5, 2025</div>
+          <div class="meta-item">📍 Ahmedabad, Gujarat</div>
+          <div class="meta-item">🏢 HealthCare India NGO</div>
+        </div>
+        <div class="event-skills">
+          <span class="skill-tag">Medical</span>
+          <span class="skill-tag">First Aid</span>
+          <span class="skill-tag">Data Entry</span>
+        </div>
+        <div class="event-footer">
+          <div class="volunteers-count"><strong>32</strong> / 40 volunteers</div>
+          <a href="login.html" class="btn-join">Join Event</a>
+        </div>
+      </div>
+    </div>
+    <!-- Event 3 -->
+    <div class="event-card">
+      <div class="event-banner" style="background:linear-gradient(135deg,#2d6b0d,#5ea820)">
+        🌳
+        <span class="event-status status-upcoming">Upcoming</span>
+      </div>
+      <div class="event-body">
+        <div class="event-category">Environment</div>
+        <h3>Green City Initiative – Tree Plantation Drive</h3>
+        <div class="event-meta">
+          <div class="meta-item">📅 May 1, 2025</div>
+          <div class="meta-item">📍 Vadodara, Gujarat</div>
+          <div class="meta-item">🏢 EcoGreen Foundation</div>
+        </div>
+        <div class="event-skills">
+          <span class="skill-tag">Gardening</span>
+          <span class="skill-tag">Physical Fitness</span>
+          <span class="skill-tag">Coordination</span>
+        </div>
+        <div class="event-footer">
+          <div class="volunteers-count"><strong>5</strong> / 50 volunteers</div>
+          <a href="login.html" class="btn-join">Join Event</a>
+        </div>
+      </div>
+    </div>
+    <!-- Event 4 -->
+    <div class="event-card">
+      <div class="event-banner" style="background:linear-gradient(135deg,#6b1a6b,#a82da8)">
+        💻
+        <span class="event-status status-open">Open</span>
+      </div>
+      <div class="event-body">
+        <div class="event-category">Technology</div>
+        <h3>Digital Literacy Workshop for Seniors</h3>
+        <div class="event-meta">
+          <div class="meta-item">📅 March 22, 2025</div>
+          <div class="meta-item">📍 Rajkot, Gujarat</div>
+          <div class="meta-item">🏢 TechForGood India</div>
+        </div>
+        <div class="event-skills">
+          <span class="skill-tag">IT Skills</span>
+          <span class="skill-tag">Teaching</span>
+          <span class="skill-tag">Patience</span>
+        </div>
+        <div class="event-footer">
+          <div class="volunteers-count"><strong>8</strong> / 15 volunteers</div>
+          <a href="login.html" class="btn-join">Join Event</a>
+        </div>
+      </div>
+    </div>
+    <!-- Event 5 -->
+    <div class="event-card">
+      <div class="event-banner" style="background:linear-gradient(135deg,#6b3a0d,#a8602d)">
+        🍲
+        <span class="event-status status-filled">Filled</span>
+      </div>
+      <div class="event-body">
+        <div class="event-category">Community</div>
+        <h3>Food Distribution Drive – Hunger Relief</h3>
+        <div class="event-meta">
+          <div class="meta-item">📅 March 10, 2025</div>
+          <div class="meta-item">📍 Surat, Gujarat</div>
+          <div class="meta-item">🏢 Annapurna Trust</div>
+        </div>
+        <div class="event-skills">
+          <span class="skill-tag">Cooking</span>
+          <span class="skill-tag">Logistics</span>
+          <span class="skill-tag">Leadership</span>
+        </div>
+        <div class="event-footer">
+          <div class="volunteers-count"><strong>30</strong> / 30 volunteers</div>
+          <button class="btn-join" style="background:#ccc;cursor:not-allowed">Full</button>
+        </div>
+      </div>
+    </div>
+    <!-- Event 6 -->
+    <div class="event-card">
+      <div class="event-banner" style="background:linear-gradient(135deg,#1a2a6b,#2d3ea8)">
+        🎨
+        <span class="event-status status-upcoming">Upcoming</span>
+      </div>
+      <div class="event-body">
+        <div class="event-category">Arts & Culture</div>
+        <h3>Street Art & Community Beautification</h3>
+        <div class="event-meta">
+          <div class="meta-item">📅 June 10, 2025</div>
+          <div class="meta-item">📍 Gandhinagar, Gujarat</div>
+          <div class="meta-item">🏢 Creative Commons NGO</div>
+        </div>
+        <div class="event-skills">
+          <span class="skill-tag">Painting</span>
+          <span class="skill-tag">Design</span>
+          <span class="skill-tag">Creativity</span>
+        </div>
+        <div class="event-footer">
+          <div class="volunteers-count"><strong>2</strong> / 20 volunteers</div>
+          <a href="login.html" class="btn-join">Join Event</a>
+        </div>
+      </div>
+    </div> {% endcomment %}
+  </div>
+
+  <div class="pagination">
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn">→</button>
+  </div>
+</div>
+
+
+</body>
+</html>
+{% endblock %}

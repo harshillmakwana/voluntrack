@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Registration – VolunTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root{--green:#1a6b3a;--green-light:#2d9e58;--green-pale:#e8f5ee;--gold:#e8a020;--dark:#0d1f14;--gray:#6b7c74;--white:#fafdf9;--border:#d0e6d8;}
+        *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+        body{font-family:'DM Sans',sans-serif;background:#f4f9f6;color:var(--dark);}
+        
+        /* Navigation */
+        nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(250,253,249,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:70px;}
+        .nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:900;text-decoration:none;}
+        .nav-logo span{color:var(--gold);}
+        .back-link{color:var(--green);text-decoration:none;font-weight:600;font-size:0.9rem;}
+
+        .page-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:100px 1.5rem 3rem;}
+        .register-card{background:white;border:1px solid var(--border);border-radius:24px;width:100%;max-width:720px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.06);}
+        .card-header{background:linear-gradient(135deg,#0d1f14,#1a6b3a);padding:2.5rem;text-align:center;}
+        .card-header h1{font-family:'Playfair Display',serif;font-size:1.8rem;color:white;margin-bottom:0.3rem;}
+        .card-header p{color:rgba(255,255,255,0.7);font-size:0.9rem;}
+        .card-body{padding:2.5rem;}
+
+        .section-title{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:1.5rem;padding-bottom:0.75rem;border-bottom:1px solid var(--border);}
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+        .form-group{margin-bottom:1.25rem;}
+        .form-group label{display:block;font-size:0.78rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;}
+        .form-group input, .form-group select, .form-group textarea{width:100%;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:'DM Sans',sans-serif;color:var(--dark);outline:none;transition:border-color .2s;background:var(--white);}
+        .form-group input:focus, .form-group select:focus{border-color:var(--green);}
+        .form-group.full{grid-column:1/-1;}
+        
+        /* Skills Chips */
+        .skills-grid{display:flex;flex-wrap:wrap;gap:0.5rem;margin-top:0.5rem;}
+        .skill-chip{padding:0.4rem 0.9rem;border:1px solid var(--border);border-radius:100px;font-size:0.78rem;font-weight:600;cursor:pointer;transition:all .2s;user-select:none;background: white;}
+        .skill-chip.selected{background:var(--green);color:white;border-color:var(--green);}
+        .skill-chip:hover{border-color:var(--green);}
+
+        .checkbox-group{display:flex;align-items:flex-start;gap:0.75rem;margin-bottom:1.5rem;}
+        .checkbox-group input{margin-top:3px;width:16px;height:16px;accent-color:var(--green);}
+        .checkbox-group label{font-size:0.85rem;color:var(--gray);line-height:1.5;}
+        .checkbox-group label a{color:var(--green);}
+
+        .btn-submit{width:100%;background:var(--green);color:white;padding:0.9rem;border-radius:10px;border:none;cursor:pointer;font-size:1rem;font-weight:700;font-family:'DM Sans',sans-serif;transition:all .2s;}
+        .btn-submit:hover{background:var(--green-light);}
+        
+        .error-msg { color: #e74c3c; font-size: 0.8rem; margin-bottom: 1rem; }
+        .login-link{text-align:center;margin-top:1.25rem;font-size:0.875rem;color:var(--gray);}
+        .login-link a{color:var(--green);font-weight:600;text-decoration:none;}
+
+        @media(max-width:600px){.form-row{grid-template-columns:1fr;}}
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="{% url 'index_view1' %}" class="nav-logo">Volun<span>Track</span></a>
+    <a href="{% url 'login_view' %}" class="back-link">Sign In →</a>
+</nav>
+
+<div class="page-wrap">
+    <div class="register-card">
+        <div class="card-header">
+            <h1>Volunteer Registration</h1>
+            <p>Join our community and make a difference</p>
+        </div>
+        <div class="card-body">
+            <form action="{% url 'volunteer_register' %}" method="POST">
+                {% csrf_token %}
+                
+                <div class="section-title">📋 Basic Information</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Username (Unique) *</label>
+                        <input type="text" name="username" placeholder="e.g. rahul_v" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address *</label>
+                        <input type="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password *</label>
+                        <input type="password" name="password" placeholder="Min. 8 characters" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password *</label>
+                        <input type="password" name="confirm_password" placeholder="Repeat password" required>
+                    </div>
+                </div>
+
+                <div class="section-title">👤 Personal Details</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="first_name" placeholder="Rahul">
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="last_name" placeholder="Kumar">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number *</label>
+                        <input type="tel" name="phone_number" placeholder="+91 00000 00000" required>
+                    </div>
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" name="city" placeholder="e.g. Surat, Gujarat" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Availability</label>
+                        <select name="availability">
+                            <option value="FLEXIBLE">Flexible</option>
+                            <option value="FULL_TIME">Full Time</option>
+                            <option value="WEEKENDS">Weekends Only</option>
+                            <option value="WEEKDAYS">Weekdays Only</option>
+                            <option value="EVENINGS">Evenings Only</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Bio</label>
+                        <input type="text" name="bio" placeholder="Tell us a bit about yourself">
+                    </div>
+
+                    <div class="form-group full">
+                        <label>Your Skills</label>
+                        <input type="hidden" name="skills" id="skills-input">
+                        <div class="skills-grid" id="skills-container">
+                            <span class="skill-chip" data-val="Teaching">Teaching</span>
+                            <span class="skill-chip" data-val="Healthcare">Healthcare</span>
+                            <span class="skill-chip" data-val="IT">IT & Tech</span>
+                            <span class="skill-chip" data-val="Events">Event Management</span>
+                            <span class="skill-chip" data-val="Cooking">Cooking</span>
+                            <span class="skill-chip" data-val="Design">Design</span>
+                            <span class="skill-chip" data-val="Other">Other</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="terms-vol" required>
+                    <label for="terms-vol">I agree to the <a href="#">Terms of Service</a>. My profile will be shared with partner NGOs.</label>
+                </div>
+
+                <button type="submit" class="btn-submit">Create Volunteer Account</button>
+            </form>
+            
+            <div class="login-link">Already have an account? <a href="{% url 'login_view' %}">Sign in</a></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Logic for Skills Selection
+    const chips = document.querySelectorAll('.skill-chip');
+    const skillsInput = document.getElementById('skills-input');
+    let selectedSkills = [];
+
+    chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            chip.classList.toggle('selected');
+            const val = chip.getAttribute('data-val');
+            
+            if (chip.classList.contains('selected')) {
+                selectedSkills.push(val);
+            } else {
+                selectedSkills = selectedSkills.filter(skill => skill !== val);
+            }
+            // Join skills by comma to save in the TextField
+            skillsInput.value = selectedSkills.join(', ');
+        });
+    });
+</script>
+
+</body>
+</html>

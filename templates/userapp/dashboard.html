@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard – VolunTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#1a6b3a;--green-light:#2d9e58;--green-pale:#e8f5ee;--gold:#e8a020;--dark:#0d1f14;--gray:#6b7c74;--white:#fafdf9;--border:#d0e6d8;--sidebar:240px;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:#f0f7f4;color:var(--dark);display:flex;min-height:100vh;}
+
+  /* SIDEBAR */
+  .sidebar{width:var(--sidebar);background:var(--dark);min-height:100vh;display:flex;flex-direction:column;position:fixed;left:0;top:0;z-index:100;}
+  .sidebar-logo{padding:1.5rem;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'Playfair Display',serif;font-size:1.4rem;color:white;font-weight:900;}
+  .sidebar-logo span{color:var(--gold);}
+  .sidebar-user{padding:1.25rem 1.5rem;border-bottom:1px solid rgba(255,255,255,0.08);display:flex;align-items:center;gap:0.75rem;}
+  .user-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-light));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem;color:white;flex-shrink:0;}
+  .user-info p{color:white;font-size:0.82rem;font-weight:600;}
+  .user-info span{color:rgba(255,255,255,0.4);font-size:0.72rem;}
+  .sidebar-nav{padding:1rem 0;flex:1;}
+  .nav-section-label{color:rgba(255,255,255,0.3);font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;padding:0.75rem 1.5rem 0.4rem;}
+  .sidebar-link{display:flex;align-items:center;gap:0.75rem;padding:0.7rem 1.5rem;color:rgba(255,255,255,0.55);font-size:0.85rem;font-weight:500;text-decoration:none;transition:all .2s;cursor:pointer;}
+  .sidebar-link:hover{color:white;background:rgba(255,255,255,0.06);}
+  .sidebar-link.active{color:white;background:rgba(45,158,88,0.2);border-right:3px solid var(--green-light);}
+  .sidebar-link .icon{font-size:1rem;width:20px;text-align:center;}
+  .sidebar-bottom{padding:1.5rem;border-top:1px solid rgba(255,255,255,0.08);}
+  .btn-logout{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.6);padding:0.6rem;border-radius:8px;cursor:pointer;font-size:0.82rem;font-family:'DM Sans',sans-serif;transition:all .2s;}
+  .btn-logout:hover{background:rgba(255,80,80,0.15);color:#ff8080;border-color:rgba(255,80,80,0.3);}
+
+  /* MAIN */
+  .main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+  .topbar{background:white;border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+  .topbar-title h2{font-size:1.1rem;font-weight:700;}
+  .topbar-title p{font-size:0.78rem;color:var(--gray);}
+  .topbar-actions{display:flex;align-items:center;gap:1rem;}
+  .notif-btn{position:relative;width:38px;height:38px;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+  .notif-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:#e84040;border-radius:50%;font-size:0.62rem;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;}
+  .topbar-avatar{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-light));display:flex;align-items:center;justify-content:center;font-weight:700;color:white;font-size:0.85rem;cursor:pointer;}
+
+  /* CONTENT */
+  .content{padding:2rem;flex:1;}
+  .greeting{margin-bottom:2rem;}
+  .greeting h1{font-family:'Playfair Display',serif;font-size:1.75rem;margin-bottom:0.25rem;}
+  .greeting p{color:var(--gray);font-size:0.9rem;}
+
+  /* STATS */
+  .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem;}
+  .stat-card{background:white;border-radius:14px;padding:1.5rem;border:1px solid var(--border);}
+  .stat-card .top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;}
+  .stat-card .icon-box{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+  .stat-card h3{font-family:'Playfair Display',serif;font-size:1.9rem;line-height:1;margin-bottom:0.2rem;}
+  .stat-card p{color:var(--gray);font-size:0.78rem;}
+  .stat-card .trend{font-size:0.72rem;font-weight:700;}
+  .trend-up{color:#2d9e58;}
+  .trend-down{color:#e84040;}
+
+  /* TWO PANEL */
+  .two-panel{display:grid;grid-template-columns:1.6fr 1fr;gap:1.5rem;margin-bottom:1.5rem;}
+  .panel{background:white;border-radius:14px;border:1px solid var(--border);overflow:hidden;}
+  .panel-header{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .panel-header h3{font-size:0.95rem;font-weight:700;}
+  .panel-header a{color:var(--green);font-size:0.78rem;text-decoration:none;font-weight:600;}
+
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;}
+  th{text-align:left;padding:0.75rem 1.5rem;font-size:0.72rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;border-bottom:1px solid var(--border);}
+  td{padding:0.85rem 1.5rem;font-size:0.85rem;border-bottom:1px solid #f0f7f4;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover td{background:#fafff9;}
+  .badge{display:inline-block;padding:0.2rem 0.65rem;border-radius:100px;font-size:0.7rem;font-weight:700;}
+  .badge-open{background:var(--green-pale);color:var(--green);}
+  .badge-progress{background:#fff3e0;color:#e87010;}
+  .badge-done{background:#e8f0ff;color:#3060c0;}
+  .badge-pending{background:#fff0f0;color:#c03030;}
+
+  /* ACTIVITY */
+  .activity-list{padding:1rem 1.5rem;}
+  .activity-item{display:flex;gap:0.75rem;padding:0.75rem 0;border-bottom:1px solid #f0f7f4;}
+  .activity-item:last-child{border-bottom:none;}
+  .act-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;}
+  .act-green{background:var(--green-pale);}
+  .act-gold{background:#fff8e8;}
+  .act-blue{background:#e8f0ff;}
+  .activity-item .info p{font-size:0.82rem;font-weight:600;margin-bottom:0.1rem;}
+  .activity-item .info span{font-size:0.72rem;color:var(--gray);}
+
+  /* QUICK ACTIONS */
+  .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+  .qa-btn{background:white;border:1px solid var(--border);border-radius:12px;padding:1.25rem 1rem;text-align:center;cursor:pointer;transition:all .2s;}
+  .qa-btn:hover{border-color:var(--green);box-shadow:0 4px 16px rgba(26,107,58,0.08);}
+  .qa-btn .icon{font-size:1.5rem;margin-bottom:0.5rem;}
+  .qa-btn p{font-size:0.8rem;font-weight:600;color:var(--dark);}
+
+  /* ROLE TABS */
+  .view-tabs{display:flex;gap:0.5rem;margin-bottom:2rem;}
+  .view-tab{padding:0.5rem 1.2rem;border-radius:8px;border:1px solid var(--border);background:white;cursor:pointer;font-size:0.82rem;font-weight:600;color:var(--gray);transition:all .2s;}
+  .view-tab.active{background:var(--green);color:white;border-color:var(--green);}
+
+  .mobile-sidebar-toggle{display:none;position:fixed;bottom:1.5rem;right:1.5rem;width:50px;height:50px;background:var(--green);border-radius:50%;border:none;color:white;font-size:1.2rem;cursor:pointer;z-index:200;box-shadow:0 4px 16px rgba(0,0,0,0.2);}
+
+  @media(max-width:1100px){.stats-row{grid-template-columns:repeat(2,1fr);}.quick-actions{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:900px){
+    .sidebar{transform:translateX(-100%);transition:transform .3s;}
+    .sidebar.open{transform:translateX(0);}
+    .main{margin-left:0;}
+    .two-panel{grid-template-columns:1fr;}
+    .mobile-sidebar-toggle{display:flex;align-items:center;justify-content:center;}
+  }
+  @media(max-width:600px){.stats-row{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">SVM<span>S</span></div>
+  <div class="sidebar-user">
+    <div class="user-avatar">AK</div>
+    <div class="user-info"><p>Admin Kumar</p><span>System Admin</span></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a class="sidebar-link active"><span class="icon">📊</span>Dashboard</a>
+    <div class="nav-section-label">Management</div>
+    <a class="sidebar-link"><span class="icon">👥</span>Volunteers</a>
+    <a class="sidebar-link"><span class="icon">🏢</span>Organizations</a>
+    <a class="sidebar-link"><span class="icon">📅</span>Events</a>
+    <a class="sidebar-link"><span class="icon">✅</span>Tasks</a>
+    <div class="nav-section-label">System</div>
+    <a class="sidebar-link"><span class="icon">🔔</span>Notifications</a>
+    <a class="sidebar-link"><span class="icon">📈</span>Reports</a>
+    <a class="sidebar-link"><span class="icon">⚙️</span>Settings</a>
+  </nav>
+  <div class="sidebar-bottom">
+    <button class="btn-logout" onclick="window.location.href='login.html'">🚪 Sign Out</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">
+      <h2>Admin Dashboard</h2>
+      <p>Thursday, 26 February 2026</p>
+    </div>
+    <div class="topbar-actions">
+      <div class="notif-btn">🔔<span class="notif-badge">4</span></div>
+      <div class="topbar-avatar">AK</div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="greeting">
+      <h1>Good Morning, Admin! 👋</h1>
+      <p>Here's what's happening across your volunteer network today.</p>
+    </div>
+
+    <div class="view-tabs">
+      <button class="view-tab active">Admin View</button>
+      <button class="view-tab">Organization View</button>
+      <button class="view-tab">Volunteer View</button>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="top">
+          <div>
+            <h3>512</h3>
+            <p>Total Volunteers</p>
+          </div>
+          <div class="icon-box" style="background:#e8f5ee">👥</div>
+        </div>
+        <div class="trend trend-up">↑ +24 this month</div>
+      </div>
+      <div class="stat-card">
+        <div class="top">
+          <div>
+            <h3>38</h3>
+            <p>Active Events</p>
+          </div>
+          <div class="icon-box" style="background:#fff8e8">📅</div>
+        </div>
+        <div class="trend trend-up">↑ +6 new</div>
+      </div>
+      <div class="stat-card">
+        <div class="top">
+          <div>
+            <h3>1,284</h3>
+            <p>Tasks Assigned</p>
+          </div>
+          <div class="icon-box" style="background:#e8eeff">✅</div>
+        </div>
+        <div class="trend trend-up">↑ 92% completion</div>
+      </div>
+      <div class="stat-card">
+        <div class="top">
+          <div>
+            <h3>12</h3>
+            <p>Pending Approvals</p>
+          </div>
+          <div class="icon-box" style="background:#ffe8e8">⏳</div>
+        </div>
+        <div class="trend trend-down">↑ 4 urgent</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+      <div class="qa-btn"><div class="icon">✅</div><p>Approve Registrations</p></div>
+      <div class="qa-btn"><div class="icon">📋</div><p>Create Event</p></div>
+      <div class="qa-btn"><div class="icon">🎯</div><p>Assign Tasks</p></div>
+      <div class="qa-btn"><div class="icon">📊</div><p>Generate Report</p></div>
+    </div>
+
+    <!-- TWO PANEL -->
+    <div class="two-panel">
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Recent Events</h3>
+          <a href="events.html">View All →</a>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Event Name</th><th>Date</th><th>Volunteers</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Literacy Drive 2025</strong><br><span style="color:var(--gray);font-size:0.75rem">Shiksha Foundation</span></td><td>Mar 15</td><td>18/25</td><td><span class="badge badge-open">Open</span></td></tr>
+            <tr><td><strong>Free Health Camp</strong><br><span style="color:var(--gray);font-size:0.75rem">HealthCare India</span></td><td>Apr 5</td><td>32/40</td><td><span class="badge badge-open">Open</span></td></tr>
+            <tr><td><strong>Digital Literacy</strong><br><span style="color:var(--gray);font-size:0.75rem">TechForGood India</span></td><td>Mar 22</td><td>8/15</td><td><span class="badge badge-progress">In Progress</span></td></tr>
+            <tr><td><strong>Food Distribution</strong><br><span style="color:var(--gray);font-size:0.75rem">Annapurna Trust</span></td><td>Mar 10</td><td>30/30</td><td><span class="badge badge-done">Completed</span></td></tr>
+            <tr><td><strong>Green City Initiative</strong><br><span style="color:var(--gray);font-size:0.75rem">EcoGreen Foundation</span></td><td>May 1</td><td>5/50</td><td><span class="badge badge-pending">Upcoming</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header">
+          <h3>Recent Activity</h3>
+          <a href="#">See All</a>
+        </div>
+        <div class="activity-list">
+          <div class="activity-item">
+            <div class="act-icon act-green">🙋</div>
+            <div class="info"><p>Rahul Kumar registered</p><span>Volunteer • 10 mins ago</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon act-gold">📋</div>
+            <div class="info"><p>New event created</p><span>Literacy Drive 2025 • 1 hr ago</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon act-blue">✅</div>
+            <div class="info"><p>Task completed</p><span>Food Distribution • 2 hrs ago</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon act-green">🏢</div>
+            <div class="info"><p>Org approved</p><span>TechForGood India • 3 hrs ago</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon act-gold">🎯</div>
+            <div class="info"><p>Task assigned</p><span>Priya Mehta → Health Camp • 4 hrs ago</span></div>
+          </div>
+          <div class="activity-item">
+            <div class="act-icon act-blue">📊</div>
+            <div class="info"><p>Report generated</p><span>Q1 Volunteer Report • 5 hrs ago</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PENDING APPROVALS TABLE -->
+    <div class="panel">
+      <div class="panel-header">
+        <h3>Pending Approvals</h3>
+        <a href="#">View All</a>
+      </div>
+      <table>
+        <thead>
+          <tr><th>Name</th><th>Type</th><th>Location</th><th>Applied</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>EduCare Foundation</strong></td>
+            <td>Organization</td>
+            <td>Surat, Gujarat</td>
+            <td>Today</td>
+            <td><button style="background:var(--green);color:white;border:none;padding:0.35rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer;margin-right:0.4rem">Approve</button><button style="background:#fff0f0;color:#c03030;border:1px solid #ffcccc;padding:0.35rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer">Reject</button></td>
+          </tr>
+          <tr>
+            <td><strong>Aryan Sharma</strong></td>
+            <td>Volunteer</td>
+            <td>Ahmedabad, Gujarat</td>
+            <td>Yesterday</td>
+            <td><button style="background:var(--green);color:white;border:none;padding:0.35rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer;margin-right:0.4rem">Approve</button><button style="background:#fff0f0;color:#c03030;border:1px solid #ffcccc;padding:0.35rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer">Reject</button></td>
+          </tr>
+          <tr>
+            <td><strong>GreenEarth NGO</strong></td>
+            <td>Organization</td>
+            <td>Rajkot, Gujarat</td>
+            <td>2 days ago</td>
+            <td><button style="background:var(--green);color:white;border:none;padding:0.35rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer;margin-right:0.4rem">Approve</button><button style="background:#fff0f0;color:#c03030;border:1px solid #ffcccc;padding:0.35rem 0.9rem;border-radius:6px;font-size:0.78rem;cursor:pointer">Reject</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<button class="mobile-sidebar-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+{% extends "userapp/master.html" %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact – VolunTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#1a6b3a;--green-light:#2d9e58;--green-pale:#e8f5ee;--gold:#e8a020;--dark:#0d1f14;--gray:#6b7c74;--white:#fafdf9;--border:#d0e6d8;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--dark);overflow-x:hidden;}
+  nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(250,253,249,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:70px;}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:900;text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--dark);font-size:0.9rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--green);}
+  .nav-cta{display:flex;gap:1rem;}
+  .btn{padding:0.55rem 1.4rem;border-radius:6px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;border:none;}
+  .btn-outline{border:2px solid var(--green);color:var(--green);background:transparent;}
+  .btn-outline:hover{background:var(--green);color:white;}
+  .btn-solid{background:var(--green);color:white;}
+  .btn-solid:hover{background:var(--green-light);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{width:25px;height:2px;background:var(--dark);}
+  .mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1.5rem 5%;z-index:999;flex-direction:column;gap:1rem;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{text-decoration:none;color:var(--dark);font-weight:500;font-size:1rem;padding:0.5rem 0;border-bottom:1px solid var(--border);}
+
+  .page-header{background:linear-gradient(135deg,#0d1f14,#1a6b3a);padding:130px 5% 70px;text-align:center;}
+  .page-header .label{color:var(--gold);font-size:0.8rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+  .page-header h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:white;margin-bottom:1rem;}
+  .page-header p{color:rgba(255,255,255,0.7);font-size:1.05rem;max-width:600px;margin:auto;line-height:1.8;}
+
+  .contact-section{max-width:1200px;margin:auto;padding:5rem 5%;display:grid;grid-template-columns:1fr 1.5fr;gap:4rem;align-items:start;}
+  .contact-info h2{font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:0.75rem;}
+  .contact-info p{color:var(--gray);font-size:0.95rem;line-height:1.8;margin-bottom:2rem;}
+  .contact-item{display:flex;gap:1rem;align-items:flex-start;margin-bottom:1.5rem;}
+  .contact-icon{width:44px;height:44px;background:var(--green-pale);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+  .contact-item h4{font-size:0.875rem;font-weight:700;margin-bottom:0.2rem;}
+  .contact-item p{color:var(--gray);font-size:0.875rem;margin:0;}
+  .contact-item a{color:var(--green);text-decoration:none;font-size:0.875rem;}
+
+  .form-card{background:white;border:1px solid var(--border);border-radius:20px;padding:2.5rem;}
+  .form-card h3{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:0.5rem;}
+  .form-card p{color:var(--gray);font-size:0.875rem;margin-bottom:2rem;}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .form-group{margin-bottom:1.25rem;}
+  .form-group label{display:block;font-size:0.8rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:0.4rem;}
+  .form-group input,.form-group select,.form-group textarea{width:100%;padding:0.75rem 1rem;border:1px solid var(--border);border-radius:10px;font-size:0.9rem;font-family:'DM Sans',sans-serif;color:var(--dark);outline:none;transition:border-color .2s;background:var(--white);}
+  .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--green);}
+  .form-group textarea{resize:vertical;min-height:120px;}
+  .btn-submit{width:100%;background:var(--green);color:white;padding:0.9rem;border-radius:10px;border:none;cursor:pointer;font-size:1rem;font-weight:700;font-family:'DM Sans',sans-serif;transition:all .2s;}
+  .btn-submit:hover{background:var(--green-light);transform:translateY(-1px);}
+  .success-msg{display:none;background:var(--green-pale);border:1px solid var(--green);border-radius:10px;padding:1rem;text-align:center;color:var(--green);font-weight:600;margin-top:1rem;}
+
+  /* MAP */
+  .map-section{background:#f4f9f6;padding:5rem 5%;text-align:center;}
+  .map-placeholder{max-width:1200px;margin:2rem auto 0;background:linear-gradient(135deg,var(--green),var(--green-light));border-radius:20px;height:300px;display:flex;align-items:center;justify-content:center;color:white;}
+  .map-placeholder h3{font-family:'Playfair Display',serif;font-size:1.5rem;}
+
+  footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:4rem 5% 2rem;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:auto;margin-bottom:3rem;}
+  .footer-brand .nav-logo{display:block;margin-bottom:1rem;}
+  .footer-brand p{font-size:0.875rem;line-height:1.7;}
+  .footer-col h4{color:white;font-weight:700;font-size:0.9rem;margin-bottom:1.25rem;}
+  .footer-col ul{list-style:none;}
+  .footer-col ul li{margin-bottom:0.6rem;}
+  .footer-col ul li a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem;transition:color .2s;}
+  .footer-col ul li a:hover{color:var(--gold);}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;text-align:center;font-size:0.8rem;max-width:1200px;margin:auto;}
+
+  @media(max-width:900px){.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.contact-section{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.form-row{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="{% url "index_view1" %}">Home</a><a href="{% url "about_view1" %}">About</a><a href="{% url "events_view1" %}">Events</a>
+  <a href="{% url "volunteers_view1" %}">Volunteers</a><a href="{% url "contact_view1" %}">Contact</a>
+  <a href="{% url "login_view" %}">Login</a><a href="{% url "contact_view1" %}">Register</a>
+</div>
+
+<div class="page-header">
+  <div class="label">Reach Out</div>
+  <h1>Get in Touch</h1>
+  <p>Have questions about VolunTrack or want to partner with us? We'd love to hear from you.</p>
+</div>
+
+<div class="contact-section">
+  <div class="contact-info">
+    <h2>We're Here to Help</h2>
+    <p>Whether you're an NGO looking to onboard, a volunteer with questions, or a developer interested in integration — reach out and we'll respond promptly.</p>
+    <div class="contact-item">
+      <div class="contact-icon">📧</div>
+      <div><h4>Email</h4><a href="mailto:info@VolunTrack.org">info@VolunTrack.org</a></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">📞</div>
+      <div><h4>Phone</h4><a href="tel:+911234567890">+91 12345 67890</a></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">📍</div>
+      <div><h4>Address</h4><p>VolunTrack Office, Ring Road,<br>Surat, Gujarat – 395001, India</p></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-icon">⏰</div>
+      <div><h4>Office Hours</h4><p>Monday – Friday: 9:00 AM – 6:00 PM<br>Saturday: 10:00 AM – 2:00 PM</p></div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h3>Send Us a Message</h3>
+    <p>Fill out the form and our team will get back to you within 24 hours.</p>
+    <div class="form-row">
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" placeholder="John">
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" placeholder="Doe">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Email Address</label>
+      <input type="email" placeholder="john@example.com">
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" placeholder="+91 00000 00000">
+    </div>
+    <div class="form-group">
+      <label>You Are</label>
+      <select>
+        <option>Select role...</option>
+        <option>Volunteer</option>
+        <option>NGO / Organization</option>
+        <option>Administrator</option>
+        <option>Media / Press</option>
+        <option>General Inquiry</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Message</label>
+      <textarea placeholder="Tell us how we can help..."></textarea>
+    </div>
+    <button class="btn-submit" onclick="handleSubmit()">Send Message</button>
+    <div class="success-msg" id="successMsg">✅ Thank you! Your message has been sent. We'll reply within 24 hours.</div>
+  </div>
+</div>
+
+<section class="map-section">
+  <h2 style="font-family:'Playfair Display',serif;font-size:2rem;margin-bottom:0.5rem;">Our Location</h2>
+  <p style="color:var(--gray);">Find us in Surat, Gujarat, India</p>
+  <div class="map-placeholder">
+    <div>
+      <div style="font-size:3rem;margin-bottom:0.5rem;">📍</div>
+      <h3>Surat, Gujarat, India</h3>
+      <p style="opacity:0.8;font-size:0.875rem;margin-top:0.4rem;">Ring Road, Surat – 395001</p>
+    </div>
+  </div>
+</section>
+
+
+<script>
+function handleSubmit() {
+  const msg = document.getElementById('successMsg');
+  msg.style.display = 'block';
+  setTimeout(() => msg.style.display = 'none', 5000);
+}
+</script>
+</body>
+</html>
+{% endblock content %}

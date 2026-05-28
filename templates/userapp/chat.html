@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Chat - VolunTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #1a6b3a;
+            --green-light: #2d9e58;
+            --green-pale: #e8f5ee;
+            --gold: #e8a020;
+            --dark: #0d1f14;
+            --gray: #6b7c74;
+            --white: #ffffff;
+            --bg: #f4f9f6;
+            --border: #d0e6d8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); height: 100vh; overflow: hidden; }
+
+        /* HEADER */
+        .chat-top-nav {
+            height: 70px;
+            background: var(--dark);
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 5%;
+            justify-content: space-between;
+        }
+        .chat-top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* LAYOUT */
+        .chat-container {
+            display: flex;
+            height: calc(100vh - 70px);
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 350px;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+        }
+        .sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            background: #f9fbfb;
+        }
+        .sidebar-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--green);
+        }
+        .contact-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .contact-item:hover, .contact-item.active {
+            background: var(--green-pale);
+        }
+        .contact-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--green);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-right: 15px;
+        }
+        .contact-info { flex: 1; }
+        .contact-name { font-weight: 600; font-size: 1rem; color: var(--dark); margin-bottom: 3px; }
+        .contact-role { font-size: 0.75rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.05em; }
+        
+        .badge {
+            background: var(--gold);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 12px;
+            display: none;
+        }
+        .badge.active { display: inline-block; }
+
+        /* CHAT AREA */
+        .chat-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+        }
+        .chat-header {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .chat-header-info {
+            display: flex;
+            align-items: center;
+        }
+        .chat-header h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            margin-left: 15px;
+        }
+        .btn-clear {
+            padding: 8px 15px;
+            background: transparent;
+            border: 1px solid #ff4d4d;
+            color: #ff4d4d;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .btn-clear:hover { background: #ff4d4d; color: white; }
+
+        .chat-history {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        /* MESSAGES */
+        .msg-row { display: flex; width: 100%; }
+        .msg-me { justify-content: flex-end; }
+        .msg-other { justify-content: flex-start; }
+        
+        .msg-bubble {
+            max-width: 65%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            position: relative;
+        }
+        .msg-me .msg-bubble {
+            background: var(--green);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+        .msg-other .msg-bubble {
+            background: white;
+            color: var(--dark);
+            border: 1px solid var(--border);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .msg-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            display: block;
+            text-align: right;
+        }
+
+        /* INPUT AREA */
+        .chat-input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 15px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            background: #f9fbfb;
+            transition: 0.2s;
+        }
+        .chat-input-area input:focus { border-color: var(--green); background: white; }
+        .btn-send {
+            background: var(--green);
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-send:hover { background: var(--green-light); transform: translateY(-1px); }
+
+        /* NO SELECTION STATE */
+        .no-chat-selected {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            background: var(--bg);
+        }
+        .no-chat-selected h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container { flex-direction: column; }
+            .sidebar { width: 100%; height: 30vh; border-right: none; border-bottom: 1px solid var(--border); }
+            .chat-area { height: 70vh; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-top-nav">
+    <div class="nav-logo" style="font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:900;">
+        Volun<span style="color:var(--gold);">Track</span> Chat
+    </div>
+    {% if user.role == 'ORGANIZER' %}
+        <a href="{% url 'org_dashboard' %}">← Back to Dashboard</a>
+    {% else %}
+        <a href="{% url 'volunterr_event_show' %}">← Back to Dashboard</a>
+    {% endif %}
+</div>
+
+<div class="chat-container">
+    
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Messages</h2>
+        </div>
+        <div class="contact-list" id="contactList">
+            {% for contact in contacts %}
+            <div class="contact-item" data-id="{{ contact.id }}" data-username="{{ contact.username }}" onclick="selectContact({{ contact.id }}, '{{ contact.username }}', '{{ contact.role }}')">
+                <div class="contact-avatar">{{ contact.username|slice:":1"|upper }}</div>
+                <div class="contact-info">
+                    <div class="contact-name">{{ contact.username }}</div>
+                    <div class="contact-role">{{ contact.role }}</div>
+                </div>
+                <div class="badge {% if contact.unread_count > 0 %}active{% endif %}" id="badge-{{ contact.id }}">
+                    {{ contact.unread_count }}
+                </div>
+            </div>
+            {% empty %}
+            <div style="padding: 20px; color: var(--gray); text-align: center;">No contacts found.</div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- MAIN CHAT AREA -->
+    <div class="chat-area" id="chatArea" style="display: none;">
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="contact-avatar" id="activeAvatar"></div>
+                <h3 id="activeName"></h3>
+            </div>
+            <button class="btn-clear" onclick="clearChat()">Clear Chat</button>
+        </div>
+        
+        <div class="chat-history" id="chatHistory">
+            <!-- Messages will be injected here via JS -->
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="msgInput" placeholder="Type your message here..." autocomplete="off">
+            <button class="btn-send" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- NO CHAT SELECTED STATE -->
+    <div class="no-chat-selected" id="noChatArea">
+        <h2>Welcome to VolunTrack Chat</h2>
+        <p>Select a conversation from the sidebar to start messaging.</p>
+    </div>
+
+</div>
+
+<script>
+    const currentUserId = parseInt("{{ request.user.id }}");
+    const currentUsername = "{{ request.user.username }}";
+    
+    let activeOtherId = null;
+    let socket = null;
+
+    function connectSocket() {
+        const wsProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+        const wsUrl = wsProtocol + window.location.host + "/ws/chat/";
+        socket = new WebSocket(wsUrl);
+
+        socket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if (activeOtherId && data.sender_id == activeOtherId) {
+                appendMessage(data.message, data.sender_name, false);
+                lastMessageCount += 1;
+            } else {
+                const badge = document.getElementById(`badge-${data.sender_id}`);
+                if (badge) {
+                    badge.classList.add('active');
+                    let currentCount = parseInt(badge.innerText) || 0;
+                    badge.innerText = currentCount + 1;
+                }
+            }
+        };
+
+        socket.onclose = function(e) {
+            setTimeout(connectSocket, 2000);
+        };
+    }
+
+    window.onload = function() {
+        connectSocket();
+        
+        // Check URL for active user ID
+        const urlParams = new URLSearchParams(window.location.search);
+        let activeId = urlParams.get('user') || "{{ active_chat_id|default:'' }}";
+
+        if (activeId) {
+            const el = document.querySelector(`.contact-item[data-id="${activeId}"]`);
+            if (el) {
+                el.click();
+                return;
+            }
+        }
+
+        // Fallback to first contact if none in URL
+        const firstContact = document.querySelector('.contact-item');
+        if (firstContact) {
+            firstContact.click();
+        }
+    };
+
+    function selectContact(id, username, role) {
+        activeOtherId = id;
+
+        // Update URL without refreshing to persist selection
+        const newUrl = window.location.pathname + '?user=' + id;
+        window.history.pushState({path: newUrl}, '', newUrl);
+        
+        // Update UI selection
+        document.querySelectorAll('.contact-item').forEach(item => item.classList.remove('active'));
+        document.querySelector(`.contact-item[data-id="${id}"]`).classList.add('active');
+        
+        // Hide badge and reset count
+        const badge = document.getElementById(`badge-${id}`);
+        if (badge) {
+            badge.classList.remove('active');
+            badge.innerText = "0";
+        }
+
+        // Show chat area, hide placeholder
+        document.getElementById('noChatArea').style.display = 'none';
+        document.getElementById('chatArea').style.display = 'flex';
+        
+        // Update header
+        document.getElementById('activeAvatar').innerText = username.charAt(0).toUpperCase();
+        document.getElementById('activeName').innerText = username + " (" + role + ")";
+
+        // Reset polling sync
+        lastMessageCount = 0;
+        
+        // Fetch old messages via AJAX
+        loadMessages(id);
+    }
+
+    function appendMessage(msgText, senderUsername, isMe, timeStr = "Now") {
+        const history = document.getElementById('chatHistory');
+        
+        const rowClass = isMe ? 'msg-me' : 'msg-other';
+        const nameLabel = isMe ? '' : `<b style="font-size:0.8rem; margin-bottom:5px; display:block;">${senderUsername}</b>`;
+        
+        const html = `
+            <div class="msg-row ${rowClass}">
+                <div class="msg-bubble">
+                    ${nameLabel}
+                    ${msgText}
+                    <span class="msg-time">${timeStr}</span>
+                </div>
+            </div>
+        `;
+        
+        history.insertAdjacentHTML('beforeend', html);
+        history.scrollTop = history.scrollHeight;
+    }
+
+    let lastMessageCount = 0;
+
+    function loadMessages(otherId, isPolling = false) {
+        const history = document.getElementById('chatHistory');
+        if (!isPolling) {
+            history.innerHTML = '<div style="text-align:center; color:gray;">Loading messages...</div>';
+        }
+
+        fetch("/get-messages/" + otherId + "/")
+            .then(response => response.json())
+            .then(data => {
+                if (isPolling && data.messages.length === lastMessageCount) {
+                    return; // No new messages
+                }
+                
+                lastMessageCount = data.messages.length;
+                history.innerHTML = "";
+                
+                if (data.messages.length === 0) {
+                    history.innerHTML = '<div style="text-align:center; color:gray; margin-top: 20px;">No messages yet. Start the conversation!</div>';
+                }
+                
+                data.messages.forEach(m => {
+                    const isMe = (m.sender === currentUsername);
+                    appendMessage(m.message, m.sender, isMe, m.time);
+                });
+                
+                history.scrollTop = history.scrollHeight;
+            })
+            .catch(err => console.error("Error fetching messages:", err));
+    }
+
+    // Fallback Polling every 3 seconds
+    setInterval(function() {
+        if (activeOtherId) {
+            loadMessages(activeOtherId, true);
+        }
+    }, 3000);
+
+    function sendMessage() {
+        const input = document.getElementById('msgInput');
+        const msg = input.value.trim();
+
+        if (msg === "") return;
+        if (!activeOtherId) {
+            alert("Please select a contact first.");
+            return;
+        }
+
+        // Instantly append to my own screen to feel fast
+        appendMessage(msg, currentUsername, true);
+        lastMessageCount += 1;
+
+        // Send over AJAX
+        fetch("/send-message/" + activeOtherId + "/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({ message: msg })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                // Also send via socket for instant delivery
+                if (socket && socket.readyState === WebSocket.OPEN) {
+                    socket.send(JSON.stringify({ 
+                        receiver_id: activeOtherId,
+                        message: msg 
+                    }));
+                }
+            } else {
+                console.error("Failed to send message:", data.message);
+                alert("Error sending message: " + (data.message || "Unknown error"));
+            }
+        })
+        .catch(err => {
+            console.error("Network error sending message:", err);
+            alert("Network error sending message. Please check your connection.");
+        });
+
+        // Clear input
+        input.value = "";
+        input.focus();
+    }
+
+    // Enter key to send
+    document.getElementById('msgInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+
+    function clearChat() {
+        if (!activeOtherId) return;
+        if (!confirm("Are you sure you want to delete all messages for this chat?")) return;
+
+        fetch("/clear-chat/" + activeOtherId + "/")
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('chatHistory').innerHTML = '<div style="text-align:center; color:gray; margin-top: 20px;">Chat cleared.</div>';
+            });
+    }
+
+</script>
+</body>

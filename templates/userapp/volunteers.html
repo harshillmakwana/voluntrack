@@ -1,0 +1,211 @@
+{% extends "userapp/master.html" %}
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Volunteers – VolunTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#1a6b3a;--green-light:#2d9e58;--green-pale:#e8f5ee;--gold:#e8a020;--dark:#0d1f14;--gray:#6b7c74;--white:#fafdf9;--border:#d0e6d8;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--dark);overflow-x:hidden;}
+  nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(250,253,249,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:70px;}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:900;text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--dark);font-size:0.9rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--green);}
+  .nav-cta{display:flex;gap:1rem;}
+  .btn{padding:0.55rem 1.4rem;border-radius:6px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;border:none;}
+  .btn-outline{border:2px solid var(--green);color:var(--green);background:transparent;}
+  .btn-outline:hover{background:var(--green);color:white;}
+  .btn-solid{background:var(--green);color:white;}
+  .btn-solid:hover{background:var(--green-light);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{width:25px;height:2px;background:var(--dark);}
+  .mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1.5rem 5%;z-index:999;flex-direction:column;gap:1rem;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{text-decoration:none;color:var(--dark);font-weight:500;font-size:1rem;padding:0.5rem 0;border-bottom:1px solid var(--border);}
+
+  .page-header{background:linear-gradient(135deg,#0d1f14,#1a6b3a);padding:130px 5% 70px;text-align:center;}
+  .page-header .label{color:var(--gold);font-size:0.8rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+  .page-header h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:white;margin-bottom:1rem;}
+  .page-header p{color:rgba(255,255,255,0.7);font-size:1.05rem;max-width:600px;margin:auto;line-height:1.8;}
+
+  .main-content{max-width:1200px;margin:auto;padding:4rem 5%;}
+  .section-label{color:var(--green);font-size:0.8rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+
+  /* STATS BAR */
+  .stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:3rem;}
+  .stat-box{background:white;border:1px solid var(--border);border-radius:14px;padding:1.5rem;text-align:center;}
+  .stat-box h3{font-family:'Playfair Display',serif;font-size:2rem;color:var(--green);margin-bottom:0.3rem;}
+  .stat-box p{color:var(--gray);font-size:0.825rem;}
+
+  /* FILTERS */
+  .filters-bar{display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;margin-bottom:2.5rem;padding:1.5rem;background:white;border:1px solid var(--border);border-radius:14px;}
+  .filter-group{display:flex;flex-direction:column;gap:0.3rem;flex:1;min-width:140px;}
+  .filter-group label{font-size:0.75rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:0.05em;}
+  .filter-group select,.filter-group input{padding:0.6rem 0.9rem;border:1px solid var(--border);border-radius:8px;font-size:0.875rem;font-family:'DM Sans',sans-serif;background:white;color:var(--dark);outline:none;}
+  .filter-group select:focus,.filter-group input:focus{border-color:var(--green);}
+  .btn-filter{background:var(--green);color:white;padding:0.7rem 1.5rem;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:0.875rem;}
+
+  /* VOLUNTEER GRID */
+  .volunteers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem;}
+  .volunteer-card{background:white;border:1px solid var(--border);border-radius:18px;padding:1.75rem;transition:all .3s;text-align:center;}
+  .volunteer-card:hover{box-shadow:0 10px 30px rgba(26,107,58,0.1);transform:translateY(-3px);}
+  .vol-avatar{width:72px;height:72px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:white;}
+  .vol-status{display:inline-block;padding:0.25rem 0.8rem;border-radius:100px;font-size:0.72rem;font-weight:700;margin-bottom:0.75rem;}
+  .status-available{background:var(--green-pale);color:var(--green);}
+  .status-busy{background:#fff3e0;color:#e87010;}
+  .volunteer-card h3{font-size:1rem;font-weight:700;margin-bottom:0.25rem;}
+  .vol-location{color:var(--gray);font-size:0.825rem;margin-bottom:1rem;}
+  .vol-skills{display:flex;flex-wrap:wrap;gap:0.4rem;justify-content:center;margin-bottom:1.25rem;}
+  .skill-tag{background:var(--green-pale);color:var(--green);padding:0.2rem 0.65rem;border-radius:100px;font-size:0.72rem;font-weight:600;}
+  .vol-meta{display:flex;justify-content:space-around;padding-top:1rem;border-top:1px solid var(--border);}
+  .vol-meta-item{text-align:center;}
+  .vol-meta-item strong{display:block;font-size:1.1rem;color:var(--dark);}
+  .vol-meta-item span{font-size:0.72rem;color:var(--gray);}
+
+  footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:4rem 5% 2rem;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:auto;margin-bottom:3rem;}
+  .footer-brand .nav-logo{display:block;margin-bottom:1rem;}
+  .footer-brand p{font-size:0.875rem;line-height:1.7;}
+  .footer-col h4{color:white;font-weight:700;font-size:0.9rem;margin-bottom:1.25rem;}
+  .footer-col ul{list-style:none;}
+  .footer-col ul li{margin-bottom:0.6rem;}
+  .footer-col ul li a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem;transition:color .2s;}
+  .footer-col ul li a:hover{color:var(--gold);}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;text-align:center;font-size:0.8rem;max-width:1200px;margin:auto;}
+
+  @media(max-width:900px){.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.stats-bar{grid-template-columns:repeat(2,1fr);}.footer-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.footer-grid{grid-template-columns:1fr;}.stats-bar{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="{% url "index_view1" %}">Home</a><a href="{% url "about_view1" %}">About</a><a href="{% url "events_view1" %}">Events</a>
+  <a href="{% url "volunteers_view1" %}">Volunteers</a><a href="{% url "contact_view1" %}">Contact</a>
+  <a href="{% url "login_view" %}">Login</a><a href="{% url "contact_view1" %}">Register</a>
+</div>
+
+<div class="page-header">
+  <div class="label">Our Community</div>
+  <h1>Meet Our Volunteers</h1>
+  <p>A diverse community of skilled, passionate individuals ready to make a difference.</p>
+</div>
+
+<div class="main-content">
+  <div class="stats-bar">
+    <div class="stat-box"><h3>500+</h3><p>Registered Volunteers</p></div>
+    <div class="stat-box"><h3>320</h3><p>Currently Active</p></div>
+    <div class="stat-box"><h3>48</h3><p>Skill Categories</p></div>
+    <div class="stat-box"><h3>1,200+</h3><p>Tasks Completed</p></div>
+  </div>
+
+  <div class="section-label">Find Volunteers</div>
+  <div class="filters-bar">
+    <div class="filter-group">
+      <label>Search by Name</label>
+      <input type="text" placeholder="Volunteer name...">
+    </div>
+    <div class="filter-group">
+      <label>Skill</label>
+      <select>
+        <option>All Skills</option>
+        <option>Teaching</option>
+        <option>Healthcare</option>
+        <option>IT & Technology</option>
+        <option>Cooking</option>
+        <option>Event Management</option>
+        <option>Design</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Availability</label>
+      <select>
+        <option>Any</option>
+        <option>Available</option>
+        <option>Weekends Only</option>
+        <option>Weekdays</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Location</label>
+      <input type="text" placeholder="City...">
+    </div>
+    <button class="btn-filter">Filter</button>
+  </div>
+
+  <div class="volunteers-grid">
+    {% for vol in volunteers %}
+    <div class="volunteer-card">
+        
+        <div class="vol-avatar" style="background:linear-gradient(135deg,#1a6b3a,#2d9e58); text-transform: uppercase; display: flex; align-items: center; justify-content: center; font-weight: 700;">
+            {{ vol.username|slice:":1" }}{% if vol.last_name %}{{ vol.last_name|slice:":1" }}{% endif %}
+        </div>
+
+        <span class="vol-status {% if vol.availability %}status-available{% else %}status-busy{% endif %}" style="font-size: 11px; font-weight: 600;">
+            {% if vol.availability %}
+                ✓ {{ vol.get_availability_display }}
+            {% else %}
+                ○ Flexible
+            {% endif %}
+        </span>
+
+        <h3 style="margin: 15px 0 5px; font-size: 1.2rem; color: var(--dark);">
+            {% if vol.first_name %}
+                {{ vol.first_name }} {{ vol.last_name|default:"" }}
+            {% else %}
+                {{ vol.username }}  
+            {% endif %}
+        </h3>
+
+        <div class="vol-location" style="font-size: 0.85rem; color: var(--gray); margin-bottom: 12px;">
+            📍 {{ vol.city|default:"Location Not Provided" }}
+        </div>
+
+        <div class="vol-skills" style="margin-bottom: 20px; min-height: 30px;">
+            {% if vol.skills %}
+                <span class="skill-tag" style="background: #e8f5ee; color: #1a6b3a; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block;">
+                    {{ vol.skills|truncatechars:40 }}
+                </span>
+            {% else %}
+                <span class="skill-tag" style="background: #f0f0f0; color: #666; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem;">General Helper</span>
+            {% endif %}
+        </div>
+
+        <div class="vol-meta" style="display: flex; justify-content: space-around; border-top: 1px solid #eee; padding-top: 15px;">
+            <div class="vol-meta-item" style="text-align: center;">
+                <strong style="display: block; font-size: 1rem;">12</strong>
+                <span style="font-size: 11px; color: var(--gray); text-transform: uppercase;">Events</span>
+            </div>
+            <div class="vol-meta-item" style="text-align: center;">
+                <strong style="display: block; font-size: 1rem;">34</strong>
+                <span style="font-size: 11px; color: var(--gray); text-transform: uppercase;">Tasks</span>
+            </div>
+            <div class="vol-meta-item" style="text-align: center;">
+                <strong style="display: block; font-size: 1rem; color: var(--gold);">4.9★</strong>
+                <span style="font-size: 11px; color: var(--gray); text-transform: uppercase;">Rating</span>
+            </div>
+        </div>
+
+        <a href="#" class="btn-view" style="display: block; margin-top: 15px; text-decoration: none; color: var(--green); font-weight: 700; font-size: 0.85rem; text-align: center; border: 1px solid var(--green); padding: 8px; border-radius: 8px; transition: 0.3s;" onmouseover="this.style.background='var(--green)'; this.style.color='white';" onmouseout="this.style.background='transparent'; this.style.color='var(--green)';">
+            View Full Profile
+        </a>
+    </div>
+
+    {% empty %}
+    <div style="grid-column: 1/-1; text-align: center; padding: 60px; background: white; border-radius: 20px; border: 1px dashed var(--border);">
+        <h3 style="color: var(--gray);">No volunteers registered yet.</h3>
+    </div>
+    {% endfor %}
+</div>
+</div>
+
+</body>
+</html>
+{% endblock %}

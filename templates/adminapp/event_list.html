@@ -1,0 +1,257 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse Events – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.filter-bar {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+.filter-bar .form-group { margin-bottom: 0; flex: 1; min-width: 160px; }
+
+.event-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+
+.event-color-1 { background: linear-gradient(135deg, #EFF6FF, #BFDBFE); }
+.event-color-2 { background: linear-gradient(135deg, #F0FDF4, #BBF7D0); }
+.event-color-3 { background: linear-gradient(135deg, #FFF7ED, #FED7AA); }
+.event-color-4 { background: linear-gradient(135deg, #FDF4FF, #E9D5FF); }
+.event-color-5 { background: linear-gradient(135deg, #FFF1F2, #FECDD3); }
+
+.event-img-icon { font-size: 52px; }
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+
+      <!-- Filter Bar -->
+      <div class="filter-bar fade-up">
+        <div class="form-group" style="flex:2;min-width:240px">
+          <label class="form-label">Search Events</label>
+          <div class="input-group">
+            <span class="input-icon">🔍</span>
+            <input type="text" class="form-control" placeholder="Search by name or location...">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Category</label>
+          <select class="form-control">
+            <option>All Categories</option>
+            <option>Environment</option>
+            <option>Education</option>
+            <option>Health</option>
+            <option>Community</option>
+            <option>Animal Welfare</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Status</label>
+          <select class="form-control">
+            <option>All Events</option>
+            <option>Open</option>
+            <option>Closing Soon</option>
+          </select>
+        </div>
+        <button class="btn btn-primary">Filter</button>
+      </div>
+
+      <!-- Results header -->
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px" class="fade-up fade-up-1">
+        <div style="font-size:14px;color:var(--muted)">Showing <strong style="color:var(--dark)">12 events</strong></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-outline btn-sm">☰ List</button>
+          <button class="btn btn-primary btn-sm">⊞ Grid</button>
+        </div>
+      </div>
+
+      <!-- Event Grid -->
+      <div class="event-grid fade-up fade-up-2">
+
+        <div class="event-card">
+          <div class="event-img event-color-1"><span class="event-img-icon">🌿</span></div>
+          <div class="event-meta">
+            <div class="event-tags">
+              <span class="badge badge-success">Environment</span>
+              <span class="badge badge-primary">Open</span>
+            </div>
+            <div class="event-name">Community Park Cleanup</div>
+            <div class="event-info">
+              <div class="event-info-row">📅 March 15, 2026 &nbsp;·&nbsp; 9:00 AM</div>
+              <div class="event-info-row">📍 Riverside Park, Ahmedabad</div>
+              <div class="event-info-row">👥 23 / 50 volunteers</div>
+            </div>
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">View Details</a>
+              <a href="{% url "apply_event_view" %}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center">Apply →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-img event-color-3"><span class="event-img-icon">🍲</span></div>
+          <div class="event-meta">
+            <div class="event-tags">
+              <span class="badge badge-warning">Community</span>
+              <span class="badge badge-danger">Closing Soon</span>
+            </div>
+            <div class="event-name">Food Bank Distribution Drive</div>
+            <div class="event-info">
+              <div class="event-info-row">📅 March 22, 2026 &nbsp;·&nbsp; 10:00 AM</div>
+              <div class="event-info-row">📍 City Center, Ahmedabad</div>
+              <div class="event-info-row">👥 41 / 45 volunteers</div>
+            </div>
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">View Details</a>
+              <a href="{% url "apply_event_view" %}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center">Apply →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-img event-color-2"><span class="event-img-icon">📚</span></div>
+          <div class="event-meta">
+            <div class="event-tags">
+              <span class="badge badge-primary">Education</span>
+              <span class="badge badge-success">Open</span>
+            </div>
+            <div class="event-name">Youth Education Fair 2026</div>
+            <div class="event-info">
+              <div class="event-info-row">📅 April 5, 2026 &nbsp;·&nbsp; 8:00 AM</div>
+              <div class="event-info-row">📍 Community Hall, Vadodara</div>
+              <div class="event-info-row">👥 15 / 60 volunteers</div>
+            </div>
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">View Details</a>
+              <a href="{% url "apply_event_view" %}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center">Apply →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-img event-color-4"><span class="event-img-icon">🏥</span></div>
+          <div class="event-meta">
+            <div class="event-tags">
+              <span class="badge badge-danger">Health</span>
+              <span class="badge badge-success">Open</span>
+            </div>
+            <div class="event-name">Blood Donation Camp</div>
+            <div class="event-info">
+              <div class="event-info-row">📅 April 12, 2026 &nbsp;·&nbsp; 9:00 AM</div>
+              <div class="event-info-row">📍 Civil Hospital, Ahmedabad</div>
+              <div class="event-info-row">👥 8 / 30 volunteers</div>
+            </div>
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">View Details</a>
+              <a href="{% url "apply_event_view" %}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center">Apply →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-img event-color-5"><span class="event-img-icon">🐾</span></div>
+          <div class="event-meta">
+            <div class="event-tags">
+              <span class="badge badge-warning">Animal Welfare</span>
+              <span class="badge badge-success">Open</span>
+            </div>
+            <div class="event-name">Animal Shelter Support Day</div>
+            <div class="event-info">
+              <div class="event-info-row">📅 April 20, 2026 &nbsp;·&nbsp; 10:00 AM</div>
+              <div class="event-info-row">📍 City Animal Shelter</div>
+              <div class="event-info-row">👥 5 / 20 volunteers</div>
+            </div>
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">View Details</a>
+              <a href="{% url "apply_event_view" %}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center">Apply →</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="event-card">
+          <div class="event-img event-color-1"><span class="event-img-icon">🌊</span></div>
+          <div class="event-meta">
+            <div class="event-tags">
+              <span class="badge badge-success">Environment</span>
+              <span class="badge badge-success">Open</span>
+            </div>
+            <div class="event-name">River Clean Initiative</div>
+            <div class="event-info">
+              <div class="event-info-row">📅 May 3, 2026 &nbsp;·&nbsp; 7:00 AM</div>
+              <div class="event-info-row">📍 Sabarmati Riverfront</div>
+              <div class="event-info-row">👥 30 / 80 volunteers</div>
+            </div>
+            <div style="margin-top:14px;display:flex;gap:8px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm" style="flex:1;justify-content:center">View Details</a>
+              <a href="{% url "apply_event_view" %}" class="btn btn-primary btn-sm" style="flex:1;justify-content:center">Apply →</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Pagination -->
+      <div style="display:flex;justify-content:center;gap:8px;margin-top:32px" class="fade-up">
+        <button class="btn btn-outline btn-sm">← Prev</button>
+        <button class="btn btn-primary btn-sm">1</button>
+        <button class="btn btn-outline btn-sm">2</button>
+        <button class="btn btn-outline btn-sm">3</button>
+        <button class="btn btn-outline btn-sm">Next →</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card">
+<div class="avatar">AK</div><div class="user-info"><div class="name">{{request.user}}</div><div class="role"></div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Browse Events</div><div class="page-sub">Find and apply for volunteer opportunities</div></div><div class="topbar-actions"><button class="icon-btn">🔔<span class="badge-dot"></span></button><a href="profile_view.html" class="icon-btn">👤</a></div></div>`);
+</script>
+</body>
+</html>

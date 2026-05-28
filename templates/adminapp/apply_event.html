@@ -1,0 +1,220 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply for Event – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.event-summary {
+  background: var(--primary-light);
+  border: 1px solid #BFDBFE;
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+.event-summary .event-icon { font-size: 40px; flex-shrink: 0; }
+.success-screen {
+  text-align: center;
+  padding: 40px;
+  display: none;
+}
+.success-screen .success-icon { font-size: 64px; margin-bottom: 16px; }
+.success-screen h3 { font-size: 22px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+
+      <div class="mb-3 fade-up">
+        <a href="{% url "event_detail_view" %}" class="btn btn-ghost btn-sm" style="padding-left:0">← Back to Event</a>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-7">
+
+          <!-- Steps -->
+          <div class="steps fade-up mb-4">
+            <div class="step active" id="step1"><div class="step-num">1</div><span class="step-label">Application</span></div>
+            <div class="step" id="step2"><div class="step-num">2</div><span class="step-label">Availability</span></div>
+            <div class="step" id="step3"><div class="step-num">3</div><span class="step-label">Confirm</span></div>
+          </div>
+
+          <!-- Event Summary -->
+          <div class="event-summary fade-up fade-up-1">
+            <span class="event-icon">🌿</span>
+            <div>
+              <div style="font-weight:700;font-size:16px;color:var(--dark)">Community Park Cleanup</div>
+              <div style="font-size:13px;color:var(--primary);margin-top:3px">📅 March 15, 2026 &nbsp;·&nbsp; 📍 Riverside Park &nbsp;·&nbsp; ⏱ 4 hours</div>
+              <div style="margin-top:6px"><span class="badge badge-success">27 spots remaining</span></div>
+            </div>
+          </div>
+
+          <!-- Application Form -->
+          <div class="card fade-up fade-up-2" id="formCard">
+            <div class="card-header"><span class="card-title">📋 Volunteer Application</span></div>
+            <div class="card-body">
+
+              <h6 style="font-size:14px;color:var(--muted);font-weight:500;margin-bottom:16px">Step 1: Your Information</h6>
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Full Name <span class="req">*</span></label>
+                    <input type="text" class="form-control" value="Aryan Kumar">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Email Address <span class="req">*</span></label>
+                    <input type="email" class="form-control" value="aryan.kumar@email.com">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" value="+91 98765 43210">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Age Group <span class="req">*</span></label>
+                    <select class="form-control">
+                      <option>18–25</option>
+                      <option>26–35</option>
+                      <option>36–50</option>
+                      <option>50+</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="form-group mt-2">
+                <label class="form-label">Relevant Skills / Experience</label>
+                <textarea class="form-control" rows="3" placeholder="Describe any skills or experience that would be helpful for this event..."></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Preferred Role</label>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px">
+                  <label class="check-group" style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px">
+                    <input type="radio" name="role" value="general" checked>
+                    <div><div style="font-size:13px;font-weight:600">General Volunteer</div><div style="font-size:12px;color:var(--muted)">Cleanup & planting</div></div>
+                  </label>
+                  <label class="check-group" style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px">
+                    <input type="radio" name="role" value="team_lead">
+                    <div><div style="font-size:13px;font-weight:600">Team Lead</div><div style="font-size:12px;color:var(--muted)">Guide a small group</div></div>
+                  </label>
+                  <label class="check-group" style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px">
+                    <input type="radio" name="role" value="registration">
+                    <div><div style="font-size:13px;font-weight:600">Registration Desk</div><div style="font-size:12px;color:var(--muted)">Check-in volunteers</div></div>
+                  </label>
+                  <label class="check-group" style="border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px">
+                    <input type="radio" name="role" value="photography">
+                    <div><div style="font-size:13px;font-weight:600">Photographer</div><div style="font-size:12px;color:var(--muted)">Document the event</div></div>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Emergency Contact Name</label>
+                <input type="text" class="form-control" placeholder="Full name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Emergency Contact Phone</label>
+                <input type="tel" class="form-control" placeholder="+91 XXXXX XXXXX">
+              </div>
+
+              <div class="form-group">
+                <label class="check-group">
+                  <input type="checkbox" checked>
+                  <span style="font-size:13px">I agree to the <a href="#">Terms & Conditions</a> and confirm I am available on March 15, 2026</span>
+                </label>
+              </div>
+              <div class="form-group">
+                <label class="check-group">
+                  <input type="checkbox">
+                  <span style="font-size:13px">I consent to photos taken during the event being used for promotional purposes</span>
+                </label>
+              </div>
+
+              <div style="display:flex;justify-content:space-between;margin-top:8px">
+                <a href="{% url "event_detail_view" %}" class="btn btn-outline">Cancel</a>
+                <button class="btn btn-primary" onclick="submitApp()">Submit Application →</button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Success State -->
+          <div class="card fade-up" id="successCard" style="display:none">
+            <div class="success-screen" style="display:block">
+              <div class="success-icon">🎉</div>
+              <h3>Application Submitted!</h3>
+              <p style="color:var(--muted);font-size:15px;max-width:360px;margin:0 auto 24px">
+                Your application for <strong>Community Park Cleanup</strong> has been received. You'll get a confirmation email shortly.
+              </p>
+              <div style="background:var(--success-light);border:1px solid #BBF7D0;border-radius:var(--radius);padding:20px;max-width:300px;margin:0 auto 24px">
+                <div style="font-size:13px;color:var(--muted)">Application ID</div>
+                <div style="font-size:20px;font-weight:700;font-family:'Sora',sans-serif;color:var(--success)">#APP-2026-0342</div>
+              </div>
+              <div style="display:flex;justify-content:center;gap:12px">
+                <a href="{% url "my_applications_view" %}" class="btn btn-primary">View My Applications</a>
+                <a href="{% url "event_list_view" %}" class="btn btn-outline">Browse More Events</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+function submitApp() {
+  document.getElementById('formCard').style.display = 'none';
+  document.getElementById('successCard').style.display = 'block';
+}
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card"><div class="avatar">AK</div>
+<div class="user-info"><div class="name">Aryan Kumar</div><div class="role">Volunteer</div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Apply for Event</div></div><div class="topbar-actions"><button class="icon-btn">🔔</button></div></div>`);
+</script>
+</body>
+</html>

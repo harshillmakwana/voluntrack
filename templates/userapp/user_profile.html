@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | VolunTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --green: #1a6b3a; --gold: #e8a020; --dark: #0d1f14; --gray: #6b7c74; --bg: #f4f9f6; --white: #ffffff; --border: #d0e6d8; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); padding-bottom: 50px; }
+
+        /* Banner & Header */
+        .profile-header { background: linear-gradient(135deg, var(--dark), var(--green)); height: 200px; position: relative; }
+        .profile-container { max-width: 900px; margin: -60px auto 0; padding: 0 20px; position: relative; }
+        
+        .profile-card { background: var(--white); border-radius: 20px; padding: 30px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        /* Avatar Logic */
+        .profile-avatar-big { 
+            width: 120px; height: 120px; background: var(--gold); border: 5px solid var(--white); 
+            border-radius: 25px; display: flex; align-items: center; justify-content: center; 
+            font-size: 3rem; font-weight: 700; color: white; margin-bottom: 20px; text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .profile-info h1 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 5px; }
+        .role-badge { display: inline-block; padding: 4px 12px; background: var(--green-pale); color: var(--green); border-radius: 20px; font-size: 0.8rem; font-weight: 700; margin-bottom: 15px; background: #e8f5ee; }
+
+        /* Grid Layout */
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 40px; }
+        .info-section h3 { font-size: 0.8rem; text-transform: uppercase; color: var(--gray); letter-spacing: 1px; margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        
+        .detail-item { margin-bottom: 15px; }
+        .detail-label { font-size: 0.85rem; color: var(--gray); margin-bottom: 2px; }
+        .detail-val { font-weight: 500; font-size: 1rem; }
+
+        .btn-edit { background: var(--green); color: white; padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; transition: 0.3s; margin-top: 20px; }
+        .btn-edit:hover { background: #2d9e58; transform: translateY(-2px); }
+
+        @media (max-width: 600px) { .info-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="profile-header"></div>
+
+    <div class="profile-container">
+        <div class="profile-card fade-up">
+            
+            <div class="profile-avatar-big">
+                {% if user.organization_name %}
+                    {{ user.organization_name|slice:":1" }}
+                {% else %}
+                    {{ user.username|slice:":1" }}
+                {% endif %}
+            </div>
+
+            <div class="profile-info">
+                <h1>
+                    {% if user.role == 'ORGANIZER' %}
+                        {{ user.organization_name|default:user.username }}
+                    {% else %}
+                        {{ user.first_name }} {{ user.last_name|default:"" }}
+                    {% endif %}
+                </h1>
+                <span class="role-badge">{{ user.role }}</span>
+                <p style="color: var(--gray); font-size: 0.95rem; max-width: 600px;">{{ user.bio|default:"No bio added yet." }}</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-section">
+                    <h3>Account Information</h3>
+                    <div class="detail-item">
+                        <div class="detail-label">Username</div>
+                        <div class="detail-val">{{ user.username }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Email Address</div>
+                        <div class="detail-val">{{ user.email }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Phone Number</div>
+                        <div class="detail-val">{{ user.phone_number|default:"Not provided" }}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">City / Location</div>
+                        <div class="detail-val">📍 {{ user.city|default:"Not set" }}</div>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    {% if user.role == 'ORGANIZER' %}
+                        <h3>Organization Details</h3>
+                        <div class="detail-item">
+                            <div class="detail-label">Contact Person</div>
+                            <div class="detail-val">{{ user.contact_person|default:"N/A" }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Organization Type</div>
+                            <div class="detail-val">{{ user.organization_type|default:"N/A" }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Description</div>
+                            <div class="detail-val" style="font-size: 0.9rem;">{{ user.organization_description|truncatewords:20 }}</div>
+                        </div>
+                    {% else %}
+                        <h3>Volunteer Profile</h3>
+                        <div class="detail-item">
+                            <div class="detail-label">Skills</div>
+                            <div class="detail-val">{{ user.skills|default:"No skills listed" }}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Availability</div>
+                            <div class="detail-val">{{ user.get_availability_display }}</div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <a href="{% url 'index_view1' %}" class="btn-edit">Back</a>
+        </div>
+    </div>
+
+</body>
+</html>

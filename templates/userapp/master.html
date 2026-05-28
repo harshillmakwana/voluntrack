@@ -1,0 +1,59 @@
+<nav>
+  <a href="{% url 'index_view1' %}" class="nav-logo">Volun<span>Track</span></a>
+  
+  <ul class="nav-links">
+    <li><a href="{% url 'index_view1' %}">Home</a></li>
+    <li><a href="{% url 'about_view1' %}" class="active">About</a></li>
+    <li><a href="{% url 'events_view1' %}">Events</a></li>
+    <li><a href="{% url 'volunteers_view1' %}">Volunteers</a></li>
+    <li><a href="{% url "volunterr_event_show" %}">Booking</a></li>
+    <li><a href="{% url 'contact_view1' %}">Contact</a></li>
+  </ul>
+
+  <div class="nav-cta" style="display: flex; align-items: center; gap: 15px;">
+    {% if user.is_authenticated %}
+      <div class="nav-user-info" style="display: flex; align-items: center; gap: 10px; margin-right: 10px;">
+        <div style="width: 32px; height: 32px; background: #e8a020; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; text-transform: uppercase;">
+            {% if user.organization_name %}
+                {{ user.organization_name|slice:":1" }}
+            {% else %}
+                {{ user.username|slice:":1" }}
+            {% endif %}
+        </div>
+        <span style="font-weight: 600; font-size: 0.9rem; color: #0d1f14;">
+            Hi, {% if user.organization_name %}{{ user.organization_name }}{% else %}{{ user.username }}{% endif %}
+        </span>
+      </div>
+
+      
+      <a href="{% url 'user_profile' %}" class="btn btn-outline" style="padding: 8px 15px;">Profile</a>
+      <a href="{% url 'logout_view' %}" class="btn btn-solid" style="background-color: #ff4d4d; padding: 8px 15px;">Logout</a>
+    
+    {% else %}
+      <a href="{% url 'login_view' %}" class="btn btn-outline">Login</a>
+      
+      <div class="register-options" style="display: inline-flex; gap: 10px;">
+        <a href="{% url 'volunteer_register' %}" class="btn btn-solid">Volunteer Register</a>
+        <a href="{% url 'organizer_register' %}" class="btn btn-solid" style="background-color: #e8a020;">Organizer Register</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="hamburger" onclick="document.getElementById('mobileMenu').classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+{% block content %}
+{% endblock content %}
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><a href="{% url "index_view1" %}" class="nav-logo">SVM<span>S</span></a><p>Smart Volunteer Management System — empowering NGOs and non-profits with intelligent volunteer coordination tools.</p></div>
+    <div class="footer-col"><h4>Navigation</h4><ul><li><a href="{% url "index_view1" %}">Home</a></li><li><a href="{% url "about_view1" %}">About</a></li><li><a href="{% url "events_view1" %}">Events</a></li><li><a href="{% url "volunteers_view1" %}">Volunteers</a></li><li><a href="{% url "contact_view1" %}">Contact</a></li></ul></div>
+    <div class="footer-col"><h4>Platform</h4><ul><li><a href="{% url "index_view1" %}">Login</a></li><li><a href="{% url "register_view" %}">Register</a></li><li><a href="{% url "dashboard_view" %}">Dashboard</a></li></ul></div>
+    <div class="footer-col"><h4>Contact</h4><ul><li><a href="mailto:info@VolunTrack.org">info@VolunTrack.org</a></li><li><a href="#">+91 12345 67890</a></li><li><a href="#">Surat, Gujarat, India</a></li></ul></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Smart Volunteer Management System. All rights reserved.</p></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizer Dashboard | VolunTrack</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --green: #1a6b3a;
+            --green-light: #2d9e58;
+            --green-pale: #e8f5ee;
+            --gold: #e8a020;
+            --dark: #0d1f14;
+            --gray: #6b7c74;
+            --white: #ffffff;
+            --bg: #f4f9f6;
+            --border: #d0e6d8;
+            --sidebar-width: 260px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--dark); display: flex; }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--dark);
+            height: 100vh;
+            position: fixed;
+            padding: 2rem 1.5rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        .sidebar-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 3rem;
+            text-decoration: none;
+            color: white;
+        }
+        .sidebar-logo span { color: var(--gold); }
+
+        .nav-menu { list-style: none; flex: 1; }
+        .nav-item { margin-bottom: 0.5rem; }
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: 0.3s;
+            font-weight: 500;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+        .nav-link.active { background: var(--green); color: white; }
+
+        /* MAIN CONTENT */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            width: calc(100% - var(--sidebar-width));
+            padding: 2rem 3rem;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2.5rem;
+        }
+        .user-info { display: flex; align-items: center; gap: 15px; }
+        .user-avatar { width: 45px; height: 45px; border-radius: 50%; background: var(--gold); display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; }
+
+        /* STATS CARDS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 2.5rem;
+        }
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .stat-card .icon { font-size: 1.5rem; margin-bottom: 10px; }
+        .stat-card .val { font-size: 1.8rem; font-weight: 700; color: var(--dark); }
+        .stat-card .label { font-size: 0.9rem; color: var(--gray); font-weight: 500; }
+
+        /* TABLE SECTION */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-create {
+            background: var(--green);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn-create:hover { background: var(--green-light); transform: translateY(-2px); }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f9fbfb; padding: 15px 20px; text-align: left; font-size: 0.8rem; text-transform: uppercase; color: var(--gray); letter-spacing: 0.05em; }
+        td { padding: 18px 20px; border-top: 1px solid var(--border); font-size: 0.95rem; }
+        
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .badge-success { background: #e8f5ee; color: #1a6b3a; }
+        .badge-warning { background: #fff8e1; color: #f57c00; }
+
+        .action-btn { padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; border: 1px solid #ddd; color: var(--gray); transition: 0.2s; }
+        .action-btn:hover { background: #f5f5f5; color: var(--dark); }
+
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <a href="#" class="sidebar-logo">Volun<span>Track</span></a>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="{% url "org_dashboard" %}" class="nav-link">📊 Dashboard</a></li>
+            <li class="nav-item"><a href="{% url "org_dash_categoryevent" %}" class="nav-link">📂 Event Categories</a></li>
+            <li class="nav-item"><a href="{% url "org_dash_event" %}" class="nav-link active">📅 My Events</a></li>
+            <li class="nav-item"><a href="{% url "org_dash_voleteer" %}" class="nav-link">🙋 Volunteers</a></li>
+            <li class="nav-item"><a href="{% url "org_booking_show" %}" class="nav-link">📩 My Bookings</a></li>
+            <li class="nav-item"><a href="{% url 'payment_history' %}" class="nav-link">💰 Payment History</a></li>
+            <li class="nav-item"><a href="{% url 'chat_index' %}" class="nav-link">💬 Live Chat</a></li>
+        </ul>
+        <a href="{% url 'logout_view' %}" class="nav-link" style="margin-top: auto; color: #ff6b6b;">🚪 Logout</a>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="header-top">
+            <div>
+                <h1 style="font-family: 'Playfair Display', serif; font-size: 1.8rem;">Organization Event Dashboard</h1>
+                <p style="color: var(--gray); font-size: 0.9rem;">Welcome back, <b>Shiksha Foundation</b></p>
+            </div>
+            <div class="user-info">
+                <div style="text-align: right;">
+                    <div style="font-weight: 600;">{{ user.username }}</div>
+                    <div style="font-size: 0.75rem; color: var(--gray);">{{user.email}}</div>
+                </div>
+                <div class="user-avatar">{{user.username|slice:":1"}}</div>
+                <a href="{% url 'org_profille' %}" class="nav-link" style="margin-top: auto; color: #da9b11;">Profile</a>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon">📅</div>
+                <div class="val">08</div>
+                <div class="label">Total Events</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">🙋</div>
+                <div class="val">142</div>
+                <div class="label">Total Volunteers</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📩</div>
+                <div class="val">12</div>
+                <div class="label">New Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="icon">⭐</div>
+                <div class="val">4.8</div>
+                <div class="label">Org Rating</div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="card-header">
+                <h3 style="font-family: 'Playfair Display', serif;">Manage My Events</h3>
+                <a href="{% url "org_dash_create_event" %}" class="btn-create" >+ Create New Event</a>
+            </div>
+            <div class="table-responsive" style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Name</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Time (Start-End)</th>
+                        <th>Location</th>
+                        <th>Volunteers</th>
+                        <th>Created By</th>
+                        <th>Status</th>
+                        <th>Price (₹)</th>
+                        <th>Active</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in eve1 %}
+                    <tr>
+                        <td><strong>{{ forloop.counter }}</strong></td>
+                        <td>{{ i.event_name }}</td>
+                        <td><span class="badge bg-light text-dark">{{ i.event_category.category_name }}</span></td>
+                        <td>{{ i.event_date }}</td>
+                        <td>{{ i.start_time }} - {{ i.end_time }}</td>
+                        <td>{{ i.location }}</td>
+                        <td>{{ i.required_volunteers }}</td>
+                        <td>{{ i.created_by }}</td>
+                        <td>{{ i.event_status }}</td>
+                        <td><strong>₹{{ i.event_price }}</strong></td>
+                        <td>
+                            {% if i.is_active == "True" or i.is_active == "Yes" %}
+                                <span class="status-badge active-true">Active</span>
+                            {% else %}
+                                <span class="status-badge active-false">Inactive</span>
+                            {% endif %}
+                        </td>
+                        <td><small class="text-muted">{{ i.created_at }}</small></td>
+                        <td><small class="text-muted">{{ i.updated_at }}</small></td>
+                        {% comment %} <td><small class="text-muted">
+                            <a href="{% url "update_event" i.id %}"><button type="button" class="btn btn-outline-primary">update</button>  </a>
+                            <a href="{% url "delete_org_categoryevent" i.id %}"><button type="button" class="btn btn-outline-danger">Delete</button>  </a>
+
+                        </small></td> {% endcomment %}
+                        <td>
+                            <a href="{% url "update_org_event" i.id %}"
+                            onclick = "return confirm('Are you sure you want to update this Event?')">
+                            <button type=button class="btn btn-outline-primary">update</button>
+
+                            <a href="{% url "delete_org_event" i.id %}"
+                            onclick = "return confirm('Are you sure you want to delete this Event?')">
+                            <button type=button class="btn btn-outline-danger">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple Sidebar Active Toggle
+        const navLinks = document.querySelectorAll('.nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Simple alert for static button
+        document.getElementById('createEventBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            alert("This would open the 'Create Event' modal in the real app!");
+        });
+    </script>
+
+</body>
+</html>

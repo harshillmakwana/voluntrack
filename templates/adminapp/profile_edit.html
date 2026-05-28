@@ -1,0 +1,234 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Edit Profile – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.avatar-upload {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.avatar-preview {
+  width: 90px; height: 90px;
+  border-radius: 50%;
+  background: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: white;
+  font-weight: 700;
+  border: 3px solid var(--border);
+}
+.avatar-change-btn {
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 28px; height: 28px;
+  background: var(--primary);
+  border: 2px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  color: white;
+  cursor: pointer;
+}
+.section-divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 28px 0 20px;
+}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+      <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+          <!-- Steps -->
+          <div class="steps fade-up mb-4">
+            <div class="step done"><div class="step-num">✓</div><span class="step-label">Basic Info</span></div>
+            <div class="step active"><div class="step-num">2</div><span class="step-label">Details</span></div>
+            <div class="step"><div class="step-num">3</div><span class="step-label">Skills</span></div>
+            <div class="step"><div class="step-num">4</div><span class="step-label">Review</span></div>
+          </div>
+
+          <div class="card fade-up fade-up-1">
+            <div class="card-header">
+              <span class="card-title">✏️ Edit Profile</span>
+              <a href=" {% url "admin_profile" %}" class="btn btn-outline btn-sm">← Back to Profile</a>
+            </div>
+            <div class="card-body">
+
+              <!-- Avatar -->
+              <div class="avatar-upload">
+                <div class="avatar-preview">AK</div>
+                <div class="avatar-change-btn">📷</div>
+              </div>
+              <p style="font-size:12px;color:var(--muted);margin-bottom:24px">Click the camera icon to change your photo. Max 2MB, JPG/PNG.</p>
+
+              <!-- Basic Info -->
+              <h6 style="color:var(--dark);font-weight:600;margin-bottom:16px">Basic Information</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">First Name <span class="req">*</span></label>
+                    <input type="text" class="form-control" value="Aryan">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Last Name <span class="req">*</span></label>
+                    <input type="text" class="form-control" value="Kumar">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Email Address <span class="req">*</span></label>
+                    <div class="input-group">
+                      <span class="input-icon">✉️</span>
+                      <input type="email" class="form-control" value="aryan.kumar@email.com">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <div class="input-group">
+                      <span class="input-icon">📱</span>
+                      <input type="tel" class="form-control" value="+91 98765 43210">
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" value="1998-03-15">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Gender</label>
+                    <select class="form-control">
+                      <option selected>Male</option>
+                      <option>Female</option>
+                      <option>Prefer not to say</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="section-divider">
+              <h6 style="color:var(--dark);font-weight:600;margin-bottom:16px">Location & Work</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" value="Ahmedabad">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">State</label>
+                    <input type="text" class="form-control" value="Gujarat">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="form-label">Occupation</label>
+                    <input type="text" class="form-control" value="Software Engineer">
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-control" rows="3">Passionate community volunteer focused on environmental and youth education initiatives.</textarea>
+                    <div class="form-hint">Briefly describe yourself and your volunteering motivation.</div>
+                  </div>
+                </div>
+              </div>
+
+              <hr class="section-divider">
+              <h6 style="color:var(--dark);font-weight:600;margin-bottom:16px">Emergency Contact</h6>
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Contact Name</label>
+                    <input type="text" class="form-control" placeholder="Full name">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Relationship</label>
+                    <input type="text" class="form-control" placeholder="e.g. Parent, Sibling">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-control" placeholder="+91 XXXXX XXXXX">
+                  </div>
+                </div>
+              </div>
+
+              <hr class="section-divider">
+              <div class="d-flex justify-content-between align-items-center">
+                <a href=" {% url "admin_profile" %}" class="btn btn-outline">Cancel</a>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline">Save Draft</button>
+                  <button class="btn btn-primary" onclick="alert('Profile saved!')">Save Changes ✓</button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card">
+<div class="avatar">AK</div><div class="user-info"><div class="name">Aryan Kumar</div><div class="role">Volunteer</div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Edit Profile</div></div><div class="topbar-actions"><button class="icon-btn">🔔</button></div></div>`);
+</script>
+</body>
+</html>

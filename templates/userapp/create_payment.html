@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment | VolunTrack</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --green: #1a6b3a;
+            --green-light: #2d9e58;
+            --green-pale: #e8f5ee;
+            --gold: #e8a020;
+            --dark: #0d1f14;
+            --gray: #6b7c74;
+            --bg: #f4f9f6;
+            --white: #ffffff;
+            --border: #d0e6d8;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgb(240, 248, 244) 0%, rgb(255, 255, 255) 90%);
+            color: var(--dark);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 30px 60px rgba(13, 31, 20, 0.08);
+            width: 100%;
+            max-width: 550px;
+            overflow: hidden;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .premium-header {
+            background: linear-gradient(135deg, var(--dark), var(--green));
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .premium-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gold), #ffdf7a);
+        }
+
+        .premium-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            margin: 0;
+            font-size: 2rem;
+            letter-spacing: -0.02em;
+        }
+
+        .premium-header p {
+            margin: 10px 0 0;
+            opacity: 0.8;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .payment-body {
+            padding: 40px;
+        }
+
+        .summary-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--green);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .summary-box {
+            background: #f9fbfb;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 14px;
+            border-bottom: 1px dashed rgba(208, 230, 216, 0.6);
+            margin-bottom: 14px;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .summary-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        .total-amount-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--green-pale);
+            border: 1px solid var(--green);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 35px;
+        }
+
+        .total-label {
+            font-weight: 700;
+            color: var(--green);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .total-value {
+            font-family: 'Playfair Display', serif;
+            font-weight: 900;
+            color: var(--green);
+            font-size: 1.8rem;
+        }
+
+        .btn-pay-rzp {
+            background: linear-gradient(135deg, var(--green), var(--green-light));
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 10px 25px rgba(26, 107, 58, 0.2);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .btn-pay-rzp:hover {
+            background: linear-gradient(135deg, var(--green-light), #32b567);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(26, 107, 58, 0.3);
+        }
+
+        .btn-pay-rzp:active {
+            transform: translateY(0);
+        }
+
+        .badge-test {
+            background: var(--gold);
+            color: var(--dark);
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 6px;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            letter-spacing: 0.05em;
+        }
+
+        .security-note {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-top: 25px;
+        }
+
+        .security-note i {
+            color: var(--green);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="payment-card">
+        <!-- Test Mode Badge -->
+        <span class="badge-test"><i class="fas fa-flask me-1"></i> Sandbox Test Mode</span>
+
+        <div class="premium-header">
+            <h2>Secure Checkout</h2>
+            <p>VolunTrack Payment Gateway</p>
+        </div>
+
+        <div class="payment-body">
+            <div class="summary-title">
+                <i class="fas fa-receipt"></i> Transaction Summary
+            </div>
+
+            <!-- Booking and Event details -->
+            <div class="summary-box">
+                <div class="summary-row">
+                    <span class="summary-label">Event Name</span>
+                    <span class="summary-value">{{ booking.event_name.event_name }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Category</span>
+                    <span class="summary-value">{{ booking.categorys.category_name }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Organizer Name</span>
+                    <span class="summary-value">{{ booking.event_name.created_by.organization_name }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Volunteer Name</span>
+                    <span class="summary-value">{{ booking.name }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Scheduled Date</span>
+                    <span class="summary-value">{{ booking.booking_date }}</span>
+                </div>
+            </div>
+
+            <!-- Amount display box -->
+            <div class="total-amount-box">
+                <span class="total-label">Total Due</span>
+                <span class="total-value">₹{{ booking.price }}</span>
+            </div>
+
+            <!-- Payment Button trigger -->
+            <button class="btn-pay-rzp" id="pay-btn">
+                <i class="fas fa-shield-alt"></i> Pay Securely with Razorpay
+            </button>
+
+            <div class="security-note">
+                <i class="fas fa-lock"></i>
+                <span>256-Bit SSL Secured & Verified By Razorpay</span>
+            </div>
+
+            <p class="text-center mt-3 small text-muted">
+                <a href="{% url 'org_booking_show' %}" class="text-decoration-none text-muted">
+                    <i class="fas fa-arrow-left me-1"></i> Return to bookings
+                </a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Hidden Form for Payment Details Submission -->
+    <form action="" method="POST" id="verify-form" style="display: none;">
+        {% csrf_token %}
+        <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+        <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
+        <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+    </form>
+
+    <!-- Razorpay Checkout Integration Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const payButton = document.getElementById('pay-btn');
+
+        const options = {
+            "key": "{{ razorpay_key_id }}",
+            "amount": "{{ amount_paise }}",
+            "currency": "{{ currency }}",
+            "name": "VolunTrack",
+            "description": "Compensation payment for {{ booking.event_name.event_name }}",
+            "image": "https://api.dicebear.com/7.x/identicon/svg?seed=VolunTrack", // High resolution premium logo
+            "order_id": "{{ razorpay_order_id }}",
+            "handler": function (response) {
+                // Successful Payment handler
+                document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                document.getElementById('razorpay_signature').value = response.razorpay_signature;
+
+                // Submit hidden form for backend verification
+                document.getElementById('verify-form').submit();
+            },
+            "prefill": {
+                "name": "{{ booking.name }}",
+                "email": "{{ booking.email }}",
+                "contact": "{{ booking.phone_number }}"
+            },
+            "notes": {
+                "booking_id": "{{ booking.id }}"
+            },
+            "theme": {
+                "color": "#1a6b3a"
+            }
+        };
+
+        const rzp = new Razorpay(options);
+
+        rzp.on('payment.failed', function (response) {
+            alert("Payment failed! Code: " + response.error.code + ". " + response.error.description);
+        });
+
+        payButton.onclick = function (e) {
+            rzp.open();
+            e.preventDefault();
+        }
+    </script>
+</body>
+
+</html>

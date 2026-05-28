@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Event Detail – VolunTrack</title>
+  <link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+  <style>
+    .event-hero {
+      height: 240px;
+      background: linear-gradient(135deg, #EFF6FF, #BFDBFE);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 72px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .event-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(37, 99, 235, .1), transparent);
+    }
+
+    .detail-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-icon {
+      font-size: 20px;
+      width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .detail-lbl {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .detail-val {
+      font-size: 14px;
+      color: var(--dark);
+      font-weight: 500;
+    }
+
+    .volunteer-slot {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+    }
+
+    .slot-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: white;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-wrapper">
+    <div class="main-content">
+      <div class="page-body">
+
+        <div class="mb-3 fade-up">
+          <a href="{% url " event_list_view" %}" class="btn btn-ghost btn-sm" style="padding-left:0">← Back to
+            Events</a>
+        </div>
+
+        <div class="row g-4">
+          <div class="col-lg-8">
+
+            <div class="event-hero fade-up">🌿</div>
+
+            <div class="card fade-up fade-up-1 mb-4">
+              <div class="card-body">
+                <div
+                  style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+                  <div>
+                    <div style="display:flex;gap:6px;margin-bottom:8px">
+                      <span class="badge badge-success">Environment</span>
+                      <span class="badge badge-primary">Open</span>
+                    </div>
+                    <h2 style="font-size:24px;margin-bottom:4px">Community Park Cleanup</h2>
+                    <p style="color:var(--muted);font-size:14px">Organized by Green Earth Foundation</p>
+                  </div>
+                  <div style="display:flex;gap:8px">
+                    <button class="btn btn-outline btn-sm">🔖 Save</button>
+                    <button class="btn btn-outline btn-sm">📤 Share</button>
+                  </div>
+                </div>
+
+                <h6 style="margin-bottom:10px;font-size:15px">About This Event</h6>
+                <p style="font-size:14px;line-height:1.75;color:var(--body)">
+                  Join us for a meaningful morning of community service as we work together to restore and beautify
+                  Riverside Park.
+                  Volunteers will help collect litter, plant native species, remove invasive plants, and improve trail
+                  accessibility.
+                  All equipment and refreshments will be provided. No experience necessary — just bring your enthusiasm!
+                </p>
+                <p style="font-size:14px;line-height:1.75;color:var(--body);margin-top:12px">
+                  This event is perfect for individuals, families, and corporate groups looking to give back to the
+                  community.
+                  Together, we've cleaned over 2 tonnes of waste from this park since 2023!
+                </p>
+
+                <h6 style="margin-top:24px;margin-bottom:10px;font-size:15px">What to Bring</h6>
+                <ul style="font-size:14px;color:var(--body);line-height:2;padding-left:20px">
+                  <li>Comfortable clothes you don't mind getting dirty</li>
+                  <li>Closed-toe shoes</li>
+                  <li>Water bottle</li>
+                  <li>Sunscreen and hat (outdoor event)</li>
+                </ul>
+
+                <h6 style="margin-top:24px;margin-bottom:10px;font-size:15px">Schedule</h6>
+                <div class="timeline">
+                  <div class="timeline-item">
+                    <div class="timeline-dot success"></div>
+                    <div class="timeline-date">9:00 AM</div>
+                    <div class="timeline-title">Check-in & Briefing</div>
+                    <div class="timeline-desc">Registration, team formation, safety instructions</div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-date">9:30 AM</div>
+                    <div class="timeline-title">Cleanup Activities Begin</div>
+                    <div class="timeline-desc">Litter collection, planting, trail work</div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot muted"></div>
+                    <div class="timeline-date">12:00 PM</div>
+                    <div class="timeline-title">Lunch Break</div>
+                    <div class="timeline-desc">Provided for all volunteers</div>
+                  </div>
+                  <div class="timeline-item">
+                    <div class="timeline-dot muted"></div>
+                    <div class="timeline-date">1:00 PM</div>
+                    <div class="timeline-title">Wrap-up & Checkout</div>
+                    <div class="timeline-desc">Final count, certificates issued</div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-lg-4">
+
+            <!-- Apply Card -->
+            <div class="card fade-up fade-up-1 mb-4" style="position:sticky;top:80px">
+              <div class="card-body" style="text-align:center">
+                <div style="font-size:13px;color:var(--muted);margin-bottom:4px">Spots remaining</div>
+                <div style="font-family:'Sora',sans-serif;font-size:32px;font-weight:700;color:var(--dark)">27</div>
+                <div style="font-size:13px;color:var(--muted);margin-bottom:16px">of 50 spots available</div>
+                <div class="progress-bar" style="margin-bottom:20px">
+                  <div class="progress-fill" style="width:46%;"></div>
+                </div>
+                <a href="{% url " apply_event_view" %}" class="btn btn-primary btn-lg"
+                  style="width:100%;justify-content:center;margin-bottom:10px">
+                  Apply Now →
+                </a>
+                <button class="btn btn-outline" style="width:100%;justify-content:center">🔖 Save Event</button>
+                <div style="margin-top:16px;font-size:12px;color:var(--muted)">Application deadline: March 13, 2026
+                </div>
+              </div>
+            </div>
+
+            <!-- Details -->
+            <div class="card fade-up fade-up-2 mb-4">
+              <div class="card-header"><span class="card-title">📋 Event Details</span></div>
+              <div class="card-body" style="padding-top:4px;padding-bottom:8px">
+                <div class="detail-row">
+                  <span class="detail-icon">📅</span>
+                  <div>
+                    <div class="detail-lbl">Date & Time</div>
+                    <div class="detail-val">March 15, 2026 · 9:00 AM</div>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-icon">📍</span>
+                  <div>
+                    <div class="detail-lbl">Location</div>
+                    <div class="detail-val">Riverside Park, Ahmedabad</div>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-icon">⏱</span>
+                  <div>
+                    <div class="detail-lbl">Duration</div>
+                    <div class="detail-val">4 hours</div>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-icon">👥</span>
+                  <div>
+                    <div class="detail-lbl">Volunteers Needed</div>
+                    <div class="detail-val">50 volunteers</div>
+                  </div>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-icon">🏢</span>
+                  <div>
+                    <div class="detail-lbl">Organizer</div>
+                    <div class="detail-val">Green Earth Foundation</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Registered Volunteers preview -->
+            <div class="card fade-up fade-up-3">
+              <div class="card-header"><span class="card-title">👥 Registered Volunteers</span><span
+                  class="badge badge-primary">23</span></div>
+              <div class="card-body">
+                <div class="volunteer-slot">
+                  <div class="slot-avatar" style="background:var(--primary)">R</div>
+                  <div style="font-size:13px;font-weight:600">Riya Shah</div><span class="badge badge-success"
+                    style="margin-left:auto;font-size:11px">Confirmed</span>
+                </div>
+                <div class="volunteer-slot">
+                  <div class="slot-avatar" style="background:#7C3AED">M</div>
+                  <div style="font-size:13px;font-weight:600">Mihir Patel</div><span class="badge badge-success"
+                    style="margin-left:auto;font-size:11px">Confirmed</span>
+                </div>
+                <div class="volunteer-slot">
+                  <div class="slot-avatar" style="background:var(--success)">D</div>
+                  <div style="font-size:13px;font-weight:600">Deepa Nair</div><span class="badge badge-warning"
+                    style="margin-left:auto;font-size:11px">Pending</span>
+                </div>
+                <button class="btn btn-ghost btn-sm" style="margin-top:8px;width:100%;justify-content:center">View all
+                  23 →</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <script>
+    const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view_ad" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card"><div class="avatar">AK</div>
+<div class="user-info"><div class="name">Aryan Kumar</div><div class="role">Volunteer</div></div></a></div></aside>`;
+    document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+    document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Event Details</div></div><div class="topbar-actions"><button class="icon-btn">🔔</button></div></div>`);
+  </script>
+</body>
+
+</html>

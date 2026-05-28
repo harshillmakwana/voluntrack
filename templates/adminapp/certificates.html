@@ -1,0 +1,260 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Certificates – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.cert-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: all var(--transition);
+}
+.cert-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.cert-preview {
+  padding: 32px 24px 24px;
+  background: linear-gradient(135deg, #F0F9FF 0%, #E0F2FE 50%, #BAE6FD 100%);
+  text-align: center;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.cert-preview::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1.5px solid rgba(37,99,235,.2);
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.cert-seal { font-size: 48px; margin-bottom: 8px; }
+.cert-org { font-size: 11px; color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: .1em; }
+.cert-title { font-family: 'Sora', sans-serif; font-size: 18px; font-weight: 700; color: var(--dark); margin: 6px 0; }
+.cert-name { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: var(--primary); }
+.cert-event { font-size: 13px; color: var(--body); margin-top: 6px; }
+.cert-date { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+.cert-footer { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+.cert-id { font-size: 11px; color: var(--muted); font-family: monospace; }
+
+.locked-cert {
+  opacity: .5;
+  filter: grayscale(1);
+}
+.locked-cert .cert-preview { background: var(--surface); }
+
+.cert-locked-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(248,250,252,.85);
+  backdrop-filter: blur(2px);
+}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+
+      <!-- Stats -->
+      <div class="row g-3 mb-4 fade-up">
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-icon amber">🏆</div>
+            <div><div class="stat-val">3</div><div class="stat-label">Certificates Earned</div></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-icon blue">🔒</div>
+            <div><div class="stat-val">2</div><div class="stat-label">Upcoming to Unlock</div></div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="stat-icon green">⬇</div>
+            <div><div class="stat-val">3</div><div class="stat-label">Available to Download</div></div>
+          </div>
+        </div>
+      </div>
+
+      <h5 class="fade-up fade-up-1 mb-3" style="font-size:16px;font-weight:600">🏆 Earned Certificates</h5>
+      <div class="row g-4 fade-up fade-up-2 mb-5">
+
+        <!-- Cert 1 -->
+        <div class="col-md-4">
+          <div class="cert-card">
+            <div class="cert-preview">
+              <div class="cert-seal">🌿</div>
+              <div class="cert-org">VolunTrack</div>
+              <div class="cert-title">Certificate of Participation</div>
+              <div class="cert-name">Aryan Kumar</div>
+              <div class="cert-event">Community Park Cleanup 2026</div>
+              <div class="cert-date">February 26, 2026 · 3.83 hours</div>
+            </div>
+            <div class="cert-footer">
+              <div>
+                <div class="cert-id">CERT-2026-0342</div>
+                <span class="badge badge-success" style="margin-top:4px">✅ Verified</span>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-outline btn-sm">👁 View</button>
+                <button class="btn btn-primary btn-sm">⬇ Download</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 2 -->
+        <div class="col-md-4">
+          <div class="cert-card">
+            <div class="cert-preview" style="background:linear-gradient(135deg,#F0FDF4,#DCFCE7,#BBF7D0)">
+              <div class="cert-seal">🌊</div>
+              <div class="cert-org">VolunTrack</div>
+              <div class="cert-title">Certificate of Participation</div>
+              <div class="cert-name">Aryan Kumar</div>
+              <div class="cert-event">River Clean Initiative 2026</div>
+              <div class="cert-date">January 20, 2026 · 5.6 hours</div>
+            </div>
+            <div class="cert-footer">
+              <div>
+                <div class="cert-id">CERT-2026-0188</div>
+                <span class="badge badge-success" style="margin-top:4px">✅ Verified</span>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-outline btn-sm">👁 View</button>
+                <button class="btn btn-primary btn-sm">⬇ Download</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert 3 -->
+        <div class="col-md-4">
+          <div class="cert-card">
+            <div class="cert-preview" style="background:linear-gradient(135deg,#FFFBEB,#FEF3C7,#FDE68A)">
+              <div class="cert-seal">🍲</div>
+              <div class="cert-org">VolunTrack</div>
+              <div class="cert-title">Certificate of Excellence</div>
+              <div class="cert-name">Aryan Kumar</div>
+              <div class="cert-event">Food Bank Drive 2025</div>
+              <div class="cert-date">December 15, 2025 · 5.5 hours</div>
+            </div>
+            <div class="cert-footer">
+              <div>
+                <div class="cert-id">CERT-2025-0892</div>
+                <span class="badge badge-success" style="margin-top:4px">✅ Verified</span>
+              </div>
+              <div style="display:flex;gap:6px">
+                <button class="btn btn-outline btn-sm">👁 View</button>
+                <button class="btn btn-primary btn-sm">⬇ Download</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <h5 class="fade-up mb-3" style="font-size:16px;font-weight:600;color:var(--muted)">🔒 Locked Certificates</h5>
+      <div class="row g-4 fade-up">
+
+        <div class="col-md-4">
+          <div class="cert-card locked-cert">
+            <div class="cert-preview" style="position:relative">
+              <div class="cert-locked-overlay">
+                <div style="font-size:32px;margin-bottom:8px">🔒</div>
+                <div style="font-size:13px;font-weight:600;color:var(--dark)">Complete the event to unlock</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:4px">Youth Education Fair 2026</div>
+              </div>
+              <div class="cert-seal">📚</div>
+              <div class="cert-org">VolunTrack</div>
+              <div class="cert-title">Certificate of Participation</div>
+              <div class="cert-name">Aryan Kumar</div>
+              <div class="cert-event">Youth Education Fair 2026</div>
+            </div>
+            <div class="cert-footer">
+              <div><span class="badge badge-muted">⏳ Pending</span></div>
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm">View Event</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="cert-card locked-cert">
+            <div class="cert-preview" style="position:relative">
+              <div class="cert-locked-overlay">
+                <div style="font-size:32px;margin-bottom:8px">🔒</div>
+                <div style="font-size:13px;font-weight:600;color:var(--dark)">Need 4 more events</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:4px">Unlock at 15 total events</div>
+              </div>
+              <div class="cert-seal">🌟</div>
+              <div class="cert-org">VolunTrack</div>
+              <div class="cert-title">Star Volunteer Award</div>
+              <div class="cert-name">Aryan Kumar</div>
+              <div class="cert-event">15 Events Milestone</div>
+            </div>
+            <div class="cert-footer">
+              <div><span class="badge badge-muted">🔒 Locked</span></div>
+              <div style="font-size:12px;color:var(--muted)">3 / 15 needed <span style="margin-left:4px">more...</span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card"><div class="avatar">AK</div>
+<div class="user-info"><div class="name">{{request.user}}</div><div class="role"></div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">Certificates</div><div class="page-sub">Your earned volunteer certificates</div></div><div class="topbar-actions"><button class="icon-btn">🔔</button></div></div>`);
+</script>
+</body>
+</html>

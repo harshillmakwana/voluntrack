@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Applications – VolunTrack</title>
+<link rel="stylesheet" href="{% static 'adminapp/style.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+<style>
+.app-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px;
+  width: fit-content;
+  margin-bottom: 24px;
+}
+.app-tab {
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--muted);
+  border: none;
+  background: transparent;
+  transition: all var(--transition);
+}
+.app-tab.active { background: var(--white); color: var(--dark); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+.app-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.app-row:last-child { border-bottom: none; }
+.app-icon {
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+  <div class="main-content">
+    <div class="page-body">
+
+      <!-- Stats Row -->
+      <div class="row g-3 mb-4 fade-up">
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="stat-icon blue">📋</div>
+            <div><div class="stat-val">8</div><div class="stat-label">Total Applied</div></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="stat-icon green">✅</div>
+            <div><div class="stat-val">5</div><div class="stat-label">Confirmed</div></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="stat-icon amber">⏳</div>
+            <div><div class="stat-val">2</div><div class="stat-label">Pending</div></div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="stat-card">
+            <div class="stat-icon red">✗</div>
+            <div><div class="stat-val">1</div><div class="stat-label">Rejected</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="app-tabs fade-up fade-up-1">
+        <button class="app-tab active">All (8)</button>
+        <button class="app-tab">Confirmed (5)</button>
+        <button class="app-tab">Pending (2)</button>
+        <button class="app-tab">Rejected (1)</button>
+      </div>
+
+      <!-- Applications List -->
+      <div class="card fade-up fade-up-2">
+        <div class="card-header">
+          <span class="card-title">My Applications</span>
+          <a href="{% url "event_list_view" %}" class="btn btn-primary btn-sm">+ Apply for Event</a>
+        </div>
+        <div class="card-body">
+
+          <div class="app-row">
+            <div class="app-icon" style="background:var(--primary-light)">🌿</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:15px;color:var(--dark)">Community Park Cleanup</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px">📅 Mar 15, 2026 &nbsp;·&nbsp; 📍 Riverside Park &nbsp;·&nbsp; Applied Feb 20</div>
+              <div style="font-size:12px;color:var(--primary);margin-top:4px">Role: General Volunteer · ID: #APP-2026-0342</div>
+            </div>
+            <span class="badge badge-success">Confirmed</span>
+            <div style="display:flex;gap:6px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm">View</a>
+              <button class="btn btn-danger btn-sm" onclick="if(confirm('Cancel application?')){}">Cancel</button>
+            </div>
+          </div>
+
+          <div class="app-row">
+            <div class="app-icon" style="background:#FFF7ED">🍲</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:15px;color:var(--dark)">Food Bank Distribution Drive</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px">📅 Mar 22, 2026 &nbsp;·&nbsp; 📍 City Center &nbsp;·&nbsp; Applied Feb 18</div>
+              <div style="font-size:12px;color:var(--primary);margin-top:4px">Role: Registration Desk · ID: #APP-2026-0318</div>
+            </div>
+            <span class="badge badge-warning">Pending</span>
+            <div style="display:flex;gap:6px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm">View</a>
+              <button class="btn btn-danger btn-sm">Cancel</button>
+            </div>
+          </div>
+
+          <div class="app-row">
+            <div class="app-icon" style="background:#F0FDF4">📚</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:15px;color:var(--dark)">Youth Education Fair 2026</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px">📅 Apr 5, 2026 &nbsp;·&nbsp; 📍 Community Hall &nbsp;·&nbsp; Applied Feb 15</div>
+              <div style="font-size:12px;color:var(--primary);margin-top:4px">Role: General Volunteer · ID: #APP-2026-0295</div>
+            </div>
+            <span class="badge badge-warning">Pending</span>
+            <div style="display:flex;gap:6px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm">View</a>
+              <button class="btn btn-danger btn-sm">Cancel</button>
+            </div>
+          </div>
+
+          <div class="app-row">
+            <div class="app-icon" style="background:var(--success-light)">🌊</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:15px;color:var(--dark)">River Clean Initiative</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px">📅 Jan 20, 2026 &nbsp;·&nbsp; 📍 Sabarmati Riverfront &nbsp;·&nbsp; Applied Jan 10</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px">Role: Team Lead · ID: #APP-2026-0188</div>
+            </div>
+            <span class="badge badge-success">Confirmed</span>
+            <div style="display:flex;gap:6px">
+              <a href="{% url "event_detail_view" %}" class="btn btn-outline btn-sm">View</a>
+              <a href="{% url "attendance_history_view" %}" class="btn btn-ghost btn-sm">📊 Attendance</a>
+            </div>
+          </div>
+
+          <div class="app-row">
+            <div class="app-icon" style="background:var(--danger-light)">🏥</div>
+            <div style="flex:1">
+              <div style="font-weight:600;font-size:15px;color:var(--dark)">Blood Donation Camp</div>
+              <div style="font-size:13px;color:var(--muted);margin-top:2px">📅 Dec 10, 2025 &nbsp;·&nbsp; 📍 Civil Hospital &nbsp;·&nbsp; Applied Nov 28</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px">ID: #APP-2025-0892</div>
+            </div>
+            <span class="badge badge-danger">Rejected</span>
+            <a href="{% url "event_list_view" %}" class="btn btn-outline btn-sm">Find Similar</a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
+<div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+
+
+
+<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<div class="nav-label">Attendance</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
+<a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
+<div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card">
+<div class="avatar">AK</div><div class="user-info"><div class="name">{{request.user}}</div><div class="role"></div></div></a></div></aside>`;
+document.querySelector('.app-wrapper').insertAdjacentHTML('afterbegin', sb);
+document.querySelector('.main-content').insertAdjacentHTML('afterbegin', `<div class="topbar"><div><div class="page-title">My Applications</div><div class="page-sub">Track your volunteer applications</div></div><div class="topbar-actions"><button class="icon-btn">🔔<span class="badge-dot"></span></button></div></div>`);
+
+document.querySelectorAll('.app-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.app-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,207 @@
+{% extends "userapp/master.html" %}
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About – VolunTrack</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--green:#1a6b3a;--green-light:#2d9e58;--green-pale:#e8f5ee;--gold:#e8a020;--dark:#0d1f14;--gray:#6b7c74;--white:#fafdf9;--border:#d0e6d8;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:var(--white);color:var(--dark);overflow-x:hidden;}
+  nav{position:fixed;top:0;width:100%;z-index:1000;background:rgba(250,253,249,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;height:70px;}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--green);font-weight:900;text-decoration:none;}
+  .nav-logo span{color:var(--gold);}
+  .nav-links{display:flex;gap:2rem;list-style:none;}
+  .nav-links a{text-decoration:none;color:var(--dark);font-size:0.9rem;font-weight:500;transition:color .2s;}
+  .nav-links a:hover,.nav-links a.active{color:var(--green);}
+  .nav-cta{display:flex;gap:1rem;}
+  .btn{padding:0.55rem 1.4rem;border-radius:6px;font-size:0.9rem;font-weight:600;cursor:pointer;text-decoration:none;transition:all .2s;border:none;}
+  .btn-outline{border:2px solid var(--green);color:var(--green);background:transparent;}
+  .btn-outline:hover{background:var(--green);color:white;}
+  .btn-solid{background:var(--green);color:white;}
+  .btn-solid:hover{background:var(--green-light);}
+  .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;}
+  .hamburger span{width:25px;height:2px;background:var(--dark);}
+  .mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:white;border-bottom:1px solid var(--border);padding:1.5rem 5%;z-index:999;flex-direction:column;gap:1rem;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{text-decoration:none;color:var(--dark);font-weight:500;font-size:1rem;padding:0.5rem 0;border-bottom:1px solid var(--border);}
+
+  /* PAGE HEADER */
+  .page-header{background:linear-gradient(135deg,#0d1f14,#1a6b3a);padding:130px 5% 70px;text-align:center;}
+  .page-header .label{color:var(--gold);font-size:0.8rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+  .page-header h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);color:white;margin-bottom:1rem;}
+  .page-header p{color:rgba(255,255,255,0.7);font-size:1.05rem;max-width:600px;margin:auto;line-height:1.8;}
+
+  /* MISSION */
+  .section{padding:5rem 5%;max-width:1200px;margin:auto;}
+  .section-label{color:var(--green);font-size:0.8rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:0.75rem;}
+  .section-title{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);color:var(--dark);line-height:1.2;margin-bottom:1rem;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+  .text-content p{color:var(--gray);font-size:1rem;line-height:1.8;margin-bottom:1rem;}
+  .highlight-box{background:var(--green-pale);border-left:4px solid var(--green);padding:1.5rem;border-radius:0 12px 12px 0;margin-top:1.5rem;}
+  .highlight-box p{color:var(--dark);font-weight:600;font-size:0.95rem;font-style:italic;}
+
+  /* IMAGE STAND-IN */
+  .img-block{background:linear-gradient(135deg,var(--green),var(--green-light));border-radius:20px;aspect-ratio:4/3;display:flex;flex-direction:column;align-items:center;justify-content:center;color:white;text-align:center;padding:2rem;}
+  .img-block .big-icon{font-size:4rem;margin-bottom:1rem;}
+  .img-block p{font-size:0.9rem;opacity:0.8;}
+
+  /* OBJECTIVES */
+  .objectives-bg{background:#f4f9f6;padding:5rem 5%;}
+  .objectives-inner{max-width:1200px;margin:auto;}
+  .obj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem;}
+  .obj-card{background:white;border-radius:16px;padding:1.75rem;border:1px solid var(--border);}
+  .obj-num{font-family:'Playfair Display',serif;font-size:2.5rem;color:var(--green-pale);font-weight:900;line-height:1;}
+  .obj-card h3{font-size:1rem;font-weight:700;margin:0.3rem 0 0.5rem;}
+  .obj-card p{color:var(--gray);font-size:0.875rem;line-height:1.6;}
+
+  /* TEAM */
+  .team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-top:3rem;}
+  .team-card{text-align:center;padding:2rem 1rem;}
+  .team-avatar{width:80px;height:80px;border-radius:50%;margin:0 auto 1rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:700;color:white;}
+  .team-card h3{font-size:1rem;font-weight:700;margin-bottom:0.3rem;}
+  .team-card span{color:var(--green);font-size:0.8rem;font-weight:600;}
+
+  /* TECH STACK */
+  .tech-section{background:var(--dark);padding:5rem 5%;}
+  .tech-inner{max-width:1200px;margin:auto;}
+  .tech-section .section-label{color:var(--gold);}
+  .tech-section .section-title{color:white;}
+  .tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-top:2.5rem;}
+  .tech-item{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:1.5rem 1rem;text-align:center;}
+  .tech-item .icon{font-size:2rem;margin-bottom:0.75rem;}
+  .tech-item p{color:rgba(255,255,255,0.8);font-size:0.875rem;font-weight:600;}
+
+  footer{background:var(--dark);color:rgba(255,255,255,0.6);padding:4rem 5% 2rem;}
+  .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;max-width:1200px;margin:auto;margin-bottom:3rem;}
+  .footer-brand .nav-logo{display:block;margin-bottom:1rem;}
+  .footer-brand p{font-size:0.875rem;line-height:1.7;}
+  .footer-col h4{color:white;font-weight:700;font-size:0.9rem;margin-bottom:1.25rem;}
+  .footer-col ul{list-style:none;}
+  .footer-col ul li{margin-bottom:0.6rem;}
+  .footer-col ul li a{color:rgba(255,255,255,0.5);text-decoration:none;font-size:0.875rem;transition:color .2s;}
+  .footer-col ul li a:hover{color:var(--gold);}
+  .footer-bottom{border-top:1px solid rgba(255,255,255,0.08);padding-top:2rem;text-align:center;font-size:0.8rem;max-width:1200px;margin:auto;}
+
+  @media(max-width:900px){.nav-links,.nav-cta{display:none;}.hamburger{display:flex;}.two-col{grid-template-columns:1fr;}.footer-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:600px){.footer-grid{grid-template-columns:1fr;}}
+
+
+/* TABLE SECTION */
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        }
+        .card-header {
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-create {
+            background: var(--green);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn-create:hover { background: var(--green-light); transform: translateY(-2px); }
+
+        table { width: 100%; border-collapse: collapse; }
+        th { background: #f9fbfb; padding: 15px 20px; text-align: left; font-size: 0.8rem; text-transform: uppercase; color: var(--gray); letter-spacing: 0.05em; }
+        td { padding: 18px 20px; border-top: 1px solid var(--border); font-size: 0.95rem; }
+        
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+        .badge-success { background: #e8f5ee; color: #1a6b3a; }
+        .badge-warning { background: #fff8e1; color: #f57c00; }
+
+        .action-btn { padding: 6px 12px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; text-decoration: none; border: 1px solid #ddd; color: var(--gray); transition: 0.2s; }
+        .action-btn:hover { background: #f5f5f5; color: var(--dark); }
+
+        @media (max-width: 1024px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+
+</style>
+</head>
+<body>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="{% url "index_view1" %}">Home</a>
+  <a href="{% url "about_view1" %}">About</a>
+  <a href="{% url "events_view1" %}">Events</a>
+  <a href="{% url "volunteers_view1" %}">Volunteers</a>
+  <a href="contact.html">Contact</a>
+  <a href="login.html">Login</a>
+  <a href="register.html">Register</a>
+</div>
+
+<div class="page-header">
+  <div class="label">Booking VolunTrack</div>
+  <h1>My Booking</h1>
+  <p>Empowering communities through intelligent volunteer management, bridging the gap between passion and purpose.</p>
+</div>
+
+<div class="content-card">
+            <div class="card-header">
+                <h3 style="font-family: 'Playfair Display', serif;">Booking List</h3>
+            </div>
+            <div class="table-responsive" style="overflow-x: auto;">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>id</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Category</th>
+                        <th>Event</th>
+                        <th>Date</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Reward</th>
+                        <th>Live Chat</th>
+                    </tr>
+                </thead>
+                <tbody>
+            {% for i in shoow_book %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ i.name }}</td>
+                <td>{{ i.email }}</td>
+                <td>{{ i.phone_number }}</td>
+                <td>{{ i.categorys.category_name }}</td>
+                <td>{{ i.event_name.event_name }}</td>
+                <td>{{ i.booking_date }}</td>
+                <td>{{ i.time_start }}</td>
+                <td>{{ i.time_end }}</td>
+                <td><strong>₹{{ i.price }}</strong></td>
+                        <td><small class="text-muted">
+                            <a href="{% url 'chat_index' %}?org_name={{ i.event_name.created_by }}" class="btn btn-outline-primary" style="text-decoration:none;">
+                            LiveChat
+                            </a>
+                        </small></td>
+            </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+            </div>
+        </div>
+
+
+
+{% endblock %} 
+
