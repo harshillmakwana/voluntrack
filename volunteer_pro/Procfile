@@ -1,1 +1,1 @@
-web: gunicorn volunteer_pro.wsgi:application
+web: daphne -b 0.0.0.0 -p $PORT volunteer_pro.asgi:application
