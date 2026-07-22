@@ -23,14 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-vtt=1+j1u2b^d6m6_r4@s^o7di8u9brc5pn4%1-7jv5j0#1qpp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "voluntrack-1.onrender.com",]
 
-
+CSRF_TRUSTED_ORIGINS = [
+    "https://voluntrack-1.onrender.com",
+]
 # Application definition
 
 INSTALLED_APPS = [
