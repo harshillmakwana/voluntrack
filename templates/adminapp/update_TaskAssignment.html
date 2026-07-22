@@ -168,31 +168,31 @@
 
 const sb = `<aside class="sidebar"><div class="sidebar-brand"><div class="brand-icon">🤝</div>
 <div><div class="brand-text">VolunTrack</div><span class="brand-sub">Community Platform</span></div></div>
-<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view" %}"><span class="icon">⊞</span> Dashboard</a>
-<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon">📅</span> Browse Events</a>
-<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon">📋</span> My Applications</a>
-<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon">✅</span> My Tasks</a>
+<nav class="sidebar-nav"><div class="nav-label">Main</div><a class="nav-item" href="{% url "dashboard_view_ad" %}"><span class="icon"></span> Dashboard</a>
+<a class="nav-item active" href="{% url "event_list_view" %}"><span class="icon"></span> Browse Events</a>
+<a class="nav-item" href="{% url "my_applications_view" %}"><span class="icon"></span> My Applications</a>
+<a class="nav-item" href="{% url "my_tasks_view" %}"><span class="icon"></span> My Tasks</a>
 
-<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon">✅</span>Category List</a>
+<a class="nav-item" href="{% url 'list_Category' %}"><span class="icon"></span>Category List</a>
 
-<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon">✅</span>Events List</a>
+<a class="nav-item" href="{% url 'list_Event' %}"><span class="icon"></span>Events List</a>
 
-<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon">✅</span>EventRole List</a>
+<a class="nav-item" href="{% url 'list_EventRole' %}"><span class="icon"></span>EventRole List</a>
 
-<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon">✅</span>VolunteerAppli List</a>
+<a class="nav-item" href="{% url 'list_VolunteerApplication' %}"><span class="icon"></span>VolunteerAppli List</a>
 
-<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon">✅</span>Tasks Assigned List</a>
+<a class="nav-item" href="{% url 'list_TaskAssignment' %}"><span class="icon"></span>Tasks Assigned List</a>
 
-<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon">✅</span>Attended List</a>
+<a class="nav-item" href="{% url 'list_Attendance' %}"><span class="icon"></span>Attended List</a>
 
 
 
-<a class="nav-item" href="{% url \'list_payments\' %}"><span class="icon">💰</span>Payment List</a>
+<a class="nav-item" href="{% url 'list_payments' %}"><span class="icon"></span>Payment List</a>
 <div class="nav-label">Attendance</div>
-<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon">🔑</span> Check In</a>
-<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon">🚪</span> Check Out</a>
-<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon">📊</span> Attendance History</a>
-<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon">🏆</span> Certificates</a><div class="nav-label">Account</div>
+<a class="nav-item" href="{% url "checkin_view" %}"><span class="icon"></span> Check In</a>
+<a class="nav-item" href="{% url "checkout_view" %}"><span class="icon"></span> Check Out</a>
+<a class="nav-item" href="{% url "attendance_history_view" %}"><span class="icon"></span> Attendance History</a>
+<a class="nav-item" href="{% url "certificates_view" %}"><span class="icon"></span> Certificates</a><div class="nav-label">Account</div>
 <a class="nav-item" href="{% url "admin_profile" %}"><span class="icon">👤</span> Profile</a>
 <a class="nav-item" href="{% url "logout_view" %}"><span class="icon">↩</span> Logout</a></nav>
 <div class="sidebar-footer"><a href="{% url "admin_profile" %}" class="user-card"><div class="avatar">AK</div>
