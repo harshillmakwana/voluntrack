@@ -159,6 +159,31 @@ def logout_view(request):
     logout(request)
     return redirect('login_view')
 
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+
+def create_admin(request):
+    User = get_user_model()
+
+    if not User.objects.filter(email="admin@gmail.com").exists():
+        User.objects.create_superuser(
+            username="admin",
+            email="admin@gmail.com",
+            password="Admin@123"
+        )
+        return HttpResponse("Superuser created successfully!")
+
+    return HttpResponse("Superuser already exists.")
+
+
+
+
+
+
+
+
+
+
 # ----------------------------------------------------Org Views--------------------------------------------------
  
  
