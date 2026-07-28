@@ -165,18 +165,24 @@ from django.contrib.auth import get_user_model
 def create_admin(request):
     User = get_user_model()
 
-    if not User.objects.filter(email="admin@gmail.com").exists():
-        User.objects.create_superuser(
-            username="admin",
-            email="admin@gmail.com",
-            password="Admin@123"
-        )
-        return HttpResponse("Superuser created successfully!")
+    user, created = User.objects.get_or_create(
+        email="admin@gmail.com",
+        defaults={
+            "username": "admin",
+        }
+    )
 
-    return HttpResponse("Superuser already exists.")
+    user.role = "ADMIN"
+    user.is_staff = True
+    user.is_superuser = True
+    user.is_approved = True
+    user.set_password("Admin@123")
+    user.save()
 
-from django.http import HttpResponse
-from django.contrib.auth import get_user_model
+    if created:
+        return HttpResponse("Admin created successfully!")
+    return HttpResponse("Admin updated successfully!")
+
 
 def check_admin(request):
     User = get_user_model()
