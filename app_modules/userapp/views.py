@@ -162,26 +162,26 @@ def logout_view(request):
 from django.http import HttpResponse
 from django.contrib.auth import get_user_model
 
-def create_admin(request):
-    User = get_user_model()
+# def create_admin(request):
+#     User = get_user_model()
 
-    user, created = User.objects.get_or_create(
-        email="admin@gmail.com",
-        defaults={
-            "username": "admin",
-        }
-    )
+#     user, created = User.objects.get_or_create(
+#         email="admin@gmail.com",
+#         defaults={
+#             "username": "admin",
+#         }
+#     )
 
-    user.role = "ADMIN"
-    user.is_staff = True
-    user.is_superuser = True
-    user.is_approved = True
-    user.set_password("Admin@123")
-    user.save()
+#     user.role = "ADMIN"
+#     user.is_staff = True
+#     user.is_superuser = True
+#     user.is_approved = True
+#     user.set_password("Admin@123")
+#     user.save()
 
-    if created:
-        return HttpResponse("Admin created successfully!")
-    return HttpResponse("Admin updated successfully!")
+#     if created:
+#         return HttpResponse("Admin created successfully!")
+#     return HttpResponse("Admin updated successfully!")
 
 
 def check_admin(request):
