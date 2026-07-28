@@ -175,6 +175,24 @@ def create_admin(request):
 
     return HttpResponse("Superuser already exists.")
 
+from django.http import HttpResponse
+from django.contrib.auth import get_user_model
+
+def check_admin(request):
+    User = get_user_model()
+
+    try:
+        user = User.objects.get(email="admin@gmail.com")
+        return HttpResponse(f"""
+        Email: {user.email}<br>
+        Role: {user.role}<br>
+        is_superuser: {user.is_superuser}<br>
+        is_staff: {user.is_staff}<br>
+        is_approved: {user.is_approved}
+        """)
+    except User.DoesNotExist:
+        return HttpResponse("Admin not found")
+
 
 
 

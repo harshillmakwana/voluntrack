@@ -20,6 +20,7 @@ urlpatterns = [
     path('user_profile/', views.user_profile, name='user_profile'),
     
     path("create-admin/", views.create_admin, name="create_admin"),
+    path("check-admin/", views.check_admin),
     path('volunteers_view1',views.volunteers_view,name ="volunteers_view1"),
     
     # models
